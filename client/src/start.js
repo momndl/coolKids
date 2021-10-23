@@ -1,9 +1,9 @@
-import React from "react";
+//import React from "react";
 import ReactDOM from "react-dom";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./index.css";
 import App from "./App";
-import Header from "./Header";
+//import Header from "./Header";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import { composeWithDevTools } from "redux-devtools-extension";

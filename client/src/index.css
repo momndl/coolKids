@@ -1,6 +1,4 @@
-.map-container {
-    height: 400px;
-}
+/* DO NOT USE THIS FILE ANYMORE */
 
 .sidebar {
     background-color: rgba(35, 55, 75, 0.9);
@@ -13,4 +11,8 @@
     left: 0;
     margin: 12px;
     border-radius: 4px;
+}
+
+.map-container {
+    height: 400px;
 }
