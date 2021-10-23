@@ -1,3 +1,17 @@
 body {
     background-color: ghostwhite;
 }
+
+.searchResult {
+    border: solid black 1px;
+}
+
+#header {
+    height: 100px;
+    border: solid tomato 1px;
+}
+
+#side-nav {
+    border: solid black 1px;
+    width: 50%;
+}

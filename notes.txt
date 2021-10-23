@@ -1,0 +1,16 @@
+sudo service postgresql start
+database = coolkids
+
+stuff to do:
+
+- set up react
+    - okay, there is a map
+- set up maps
+    - set markers, (custom marker), directions, search
+- set up database
+- set up user interface
+
+components
+- login
+- register
+- app
