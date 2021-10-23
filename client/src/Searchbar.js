@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { searchResultsReceived } from "./redux/searchReducer/slice";
 import GeocoderService from "@mapbox/mapbox-sdk/services/geocoding";
 import { acces_token } from "./accestoken";
+import { updateMapCoordinates } from "./redux/mapState/slice";
 const geocoder = GeocoderService({
     accessToken: acces_token,
 });
@@ -33,6 +34,14 @@ export default function Searchbar() {
                     <div className="searchResult" key={i}>
                         <p
                             onClick={() => {
+                                console.log(
+                                    "here a dispatch handler to mapState"
+                                );
+                                dispatch(
+                                    updateMapCoordinates(
+                                        result.geometry.coordinates
+                                    )
+                                );
                                 console.log(result.geometry.coordinates);
                             }}
                         >

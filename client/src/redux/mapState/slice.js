@@ -5,6 +5,11 @@ export function mapStateReducer(state = null, action) {
     } else if (action.type == "mapState/receivedNewMapState") {
         const map = action.payload.map;
         return map;
+    } else if (action.type == "mapState/receivedNewCoordinates") {
+        const newPos = action.payload.pos;
+        console.log("coords:", action.payload.pos);
+        console.log("state:", state);
+        return { ...state, latitude: newPos[1], longitude: newPos[0] };
     }
     return state;
 }
@@ -21,5 +26,12 @@ export function updateMapState(map) {
     return {
         type: "mapState/receivedNewMapState",
         payload: { map },
+    };
+}
+
+export function updateMapCoordinates(pos) {
+    return {
+        type: "mapState/receivedNewCoordinates",
+        payload: { pos },
     };
 }

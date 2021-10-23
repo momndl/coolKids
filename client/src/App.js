@@ -4,6 +4,7 @@ import Header from "./Header";
 import React, { useRef, useEffect, useState } from "react";
 import Usermenu from "./UserMenu";
 import { Test } from "./test";
+import Searchbar from "./Searchbar";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
             {/* <Usermenu />
             <Map /> */}
             <Test />
+            <Searchbar />
         </>
     );
 }
