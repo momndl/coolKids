@@ -17,9 +17,9 @@ export function searchResultsReceived(res) {
     };
 }
 
-export function privateChatMessageReceived(msg) {
-    return {
-        type: "privateMessages/receivedNewMessage",
-        payload: { msg },
-    };
-}
+// export function privateChatMessageReceived(msg) {
+//     return {
+//         type: "privateMessages/receivedNewMessage",
+//         payload: { msg },
+//     };
+// }

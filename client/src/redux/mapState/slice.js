@@ -9,7 +9,12 @@ export function mapStateReducer(state = null, action) {
         const newPos = action.payload.pos;
         console.log("coords:", action.payload.pos);
         console.log("state:", state);
-        return { ...state, latitude: newPos[1], longitude: newPos[0] };
+        return {
+            ...state,
+            latitude: newPos[1],
+            longitude: newPos[0],
+            zoom: 16,
+        };
     }
     return state;
 }
