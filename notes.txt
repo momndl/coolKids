@@ -24,3 +24,9 @@ components
 -> search something -> click on result -> result to redux -> render infos from redux to usermenu -> fetch for db entrys -> render data to usermenu
 
 -> search in a set distance https://github.com/mapbox/mapbox-gl-geocoder/blob/master/API.md#getbbox 
+
+-> search only for playgrounds? category(pin):"playground, leisure"
+
+=> FIX LOCATION :) okay
+
+===> REST OF TODAY - CLEANUP - SPLIT COMPONENTS => ORGANIZE WORK

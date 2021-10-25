@@ -2,19 +2,22 @@ export function myLocationReducer(state = null, action) {
     if (action.type == "location/initLocationReceived") {
         console.log("hello", action.payload.pos);
         const data = action.payload.pos;
-        // const marker = {
-        //     name: data.text,
-        //     latitude: data.center[1],
-        //     longitude: data.center[0],
-        // };
-        // console.log("marker", marker);
-        // state = [marker];
+        if (state) {
+            return { ...state, data };
+        } else {
+            return { data };
+        }
     } else if (action.type == "location/enableDisableTracking") {
         console.log("bool:", action.type.bool);
         const bool = action.payload.bool;
         const toggle = { showMyLocation: bool };
         // for start no state
-        return toggle;
+
+        if (state) {
+            return { ...state, showMyLocation: bool };
+        } else {
+            return toggle;
+        }
     }
     return state;
 }

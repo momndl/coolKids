@@ -3,6 +3,7 @@ import { acces_token } from "./accestoken";
 import React, { useRef, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { mapStateReceived, updateMapState } from "./redux/mapState/slice";
+import { locationInitPosReceived } from "./redux/location/slice";
 import CustomMarker from "./label";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -14,9 +15,9 @@ export function Test() {
         (state) => state.location && state.location.showMyLocation
     );
     const dispatch = useDispatch();
-
+    let myPos;
     const [viewport, setViewport] = useState({
-        width: 1200,
+        width: "100%",
         height: 600,
         latitude: 52.516806,
         longitude: 13.383309,
@@ -30,23 +31,32 @@ export function Test() {
     const positionOptions = { enableHighAccuracy: true };
 
     useEffect(() => {
-        // var options = {
-        //     enableHighAccuracy: true,
-        //     timeout: 5000,
-        //     maximumAge: 0,
-        // };
-        // function success(pos) {
-        //     var crd = pos.coords;
-        //     console.log("Your current position is:");
-        //     console.log(`Latitude : ${crd.latitude}`);
-        //     console.log(`Longitude: ${crd.longitude}`);
-        //     console.log(`More or less ${crd.accuracy} meters.`);
-        // }
-        // function error(err) {
-        //     console.warn(`ERROR(${err.code}): ${err.message}`);
-        // }
-        // navigator.geolocation.getCurrentPosition(success, error, options);
-    }, []);
+        if (showMyLocation) {
+            const options = {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0,
+            };
+            function success(pos) {
+                console.log("pos object", pos);
+                const crd = pos.coords;
+                console.log("Your current position is:");
+                console.log(`Latitude : ${crd.latitude}`);
+                console.log(`Longitude: ${crd.longitude}`);
+                console.log(`More or less ${crd.accuracy} meters.`);
+                myPos = {
+                    pos: [crd.latitude, crd.longitude],
+                    accuracy: crd.accuracy,
+                };
+                dispatch(locationInitPosReceived(myPos));
+            }
+            function error(err) {
+                console.warn(`ERROR(${err.code}): ${err.message}`);
+            }
+            navigator.geolocation.getCurrentPosition(success, error, options);
+        }
+    }, [showMyLocation]); // listen on showMyLocation just for tests, use myPos on geocoder ->
+    // proximity	Bias the response to favor results that are closer to this location, provided as two comma-separated coordinates in longitude,latitude order.
 
     useEffect(() => {
         console.log("test");
@@ -59,6 +69,7 @@ export function Test() {
         <>
             <ReactMapGL
                 {...mapState}
+                mapStyle="mapbox://styles/mapbox/navigation-day-v1"
                 mapboxApiAccessToken={MAPBOX_TOKEN}
                 onViewportChange={(nextViewport) => {
                     dispatch(updateMapState(nextViewport));

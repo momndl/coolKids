@@ -18,10 +18,3 @@ export function targetDataReceived(data) {
         payload: { data },
     };
 }
-
-// export function privateChatMessageReceived(msg) {
-//     return {
-//         type: "privateMessages/receivedNewMessage",
-//         payload: { msg },
-//     };
-// }

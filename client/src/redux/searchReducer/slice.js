@@ -1,6 +1,7 @@
 export function searchResultsReducer(state = null, action) {
     if (action.type == "searchResults/receivedSearchResults") {
-        state = action.payload.res;
+        const search = action.payload.res;
+        return search;
     }
     // else if (action.type == "privateMessages/receivedNewMessage") {
     //     const msg = action.payload.msg;

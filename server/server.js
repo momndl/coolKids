@@ -111,6 +111,14 @@ app.post("/login.json", (req, res) => {
         );
 });
 
+app.post("/playgrounds/search.json", (req, res) => {
+    console.log("post to playgorunds serarch");
+
+    console.log("body", req.body);
+    res.json({ from: "/playgrounds/search", success: true });
+    // HERE WE NEED A DB QUERY TO FIND ->
+});
+
 app.get("/logout", (req, res) => {
     req.session = null;
     res.json({ success: true });
