@@ -3,8 +3,8 @@ import Header from "./Header";
 //import Map from "./map";
 import React, { useRef, useEffect, useState } from "react";
 import Usermenu from "./UserMenu";
-import { Test } from "./test";
-import Searchbar from "./Searchbar";
+import { Map } from "./Map";
+
 import "mapbox-gl/dist/mapbox-gl.css";
 
 export default function App() {
@@ -15,11 +15,10 @@ export default function App() {
     return (
         <>
             <Header />
-            <main>
+            <main id="appMainContainer">
                 <Usermenu />
                 {/* <Map /> */}
-                <Test />
-                <Searchbar />
+                <Map />
             </main>
         </>
     );

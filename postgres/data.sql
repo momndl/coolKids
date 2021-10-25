@@ -24,4 +24,4 @@ CREATE TABLE toys(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
 
--- maybe a table for every toy?
+-- maybe a table for every toy? OR ADD TOYS in playgrounds?

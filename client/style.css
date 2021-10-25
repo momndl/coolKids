@@ -4,6 +4,11 @@ body {
     box-sizing: border-box;
 }
 
+#root {
+    border: solid yellow 10px;
+    height: 100vh;
+}
+
 .searchResult {
     border: solid black 1px;
 }
@@ -15,9 +20,7 @@ body {
 
 #side-nav {
     border: solid black 1px;
-    width: 40%;
-    position: relative;
-    left: 0;
+
     height: 100%;
 }
 
@@ -47,4 +50,30 @@ body {
 
 .searchTarget {
     border: solid black 1px;
+}
+
+#appMainContainer {
+    border: solid 1px;
+    display: grid;
+    grid-template-columns: 405px 1fr;
+}
+
+#searchbar {
+    width: 100%;
+}
+
+#searchbar input {
+    width: 40%;
+    display: inline-block;
+    margin: 10px;
+}
+
+#searchbar button {
+    color: whitesmoke;
+    background-color: black;
+}
+
+#advancedSearchContainer {
+    border: red 2px dotted;
+    display: flex;
 }

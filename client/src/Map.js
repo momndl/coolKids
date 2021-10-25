@@ -8,7 +8,7 @@ import CustomMarker from "./label";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const MAPBOX_TOKEN = acces_token; // Set your mapbox token here
-export function Test() {
+export function Map() {
     const mapState = useSelector((state) => state.mapState);
     const mapMarker = useSelector((state) => state.mapMarker);
     const showMyLocation = useSelector(

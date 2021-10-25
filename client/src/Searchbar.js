@@ -6,21 +6,42 @@ import { acces_token } from "./accestoken";
 import { updateMapCoordinates } from "./redux/mapState/slice";
 import { markerPosReceived } from "./redux/mapMarker/slice";
 import { targetDataReceived } from "./redux/target/slice";
-const geocoder = GeocoderService({
-    accessToken: acces_token,
-});
+import { toggleLocation } from "./redux/location/slice";
+import AdvancedSearch from "./AdvancedSearch";
 
 export default function Searchbar() {
+    const geocoder = GeocoderService({
+        accessToken: acces_token,
+    });
+    const showMyLocation = useSelector(
+        (state) => state.location && state.location.showMyLocation
+    );
     const dispatch = useDispatch();
     useEffect(() => {
         console.log("searchbar mounted");
     }, []);
     const [search, setSearch] = useState("");
+    const [advancedSearch, setAdvancedSearch] = useState("");
     const myLocation = useSelector(
         (state) => state.location && state.location.data
     );
     // const state = useSelector((state) => state.state);
-
+    function advancedSearchHandler() {
+        if (!advancedSearch) {
+            setAdvancedSearch(true);
+            setSearch("");
+        } else {
+            setAdvancedSearch(false);
+            setSearch("");
+        }
+    }
+    function toggleMyLocation() {
+        if (showMyLocation) {
+            dispatch(toggleLocation(false));
+        } else {
+            dispatch(toggleLocation(true));
+        }
+    }
     // POSSIBLE HANDLER IN STORAGE.js
     async function searchHandler(e) {
         //const proxi = myLocation.pos.reverse();
@@ -37,13 +58,15 @@ export default function Searchbar() {
                 // marker: true, -> key does not work
             })
             .send();
-        console.log("res,", response);
+        //console.log("res,", response);
         setSearch(response.body.features);
         //dispatch(searchResultsReceived(response.body.features));
     }
     return (
         <div id="searchbar">
             <input type="text" onChange={searchHandler}></input>
+            <button onClick={advancedSearchHandler}>advanced search </button>
+            <button onClick={toggleMyLocation}>my location</button>
             {search &&
                 search.map((result, i) => (
                     <div className="searchResult" key={i}>
@@ -56,13 +79,15 @@ export default function Searchbar() {
                                         result.geometry.coordinates
                                     )
                                 );
-                                console.log("check", result);
+                                setSearch("");
+                                //console.log("check", result);
                             }}
                         >
                             {result.place_name}
                         </p>
                     </div>
                 ))}
+            {advancedSearch && <AdvancedSearch />}
         </div>
     );
 }
