@@ -14,3 +14,13 @@ components
 - login
 - register
 - app
+
+==================================
+- today, get db and user menu
+- user menu: checkboxes, 
+- we need location as data -> comment on test.js -> render on usermenu?
+-searchbar needs to close itself
+
+-> search something -> click on result -> result to redux -> render infos from redux to usermenu -> fetch for db entrys -> render data to usermenu
+
+-> search in a set distance https://github.com/mapbox/mapbox-gl-geocoder/blob/master/API.md#getbbox 

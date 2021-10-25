@@ -1,3 +1,5 @@
+// DONT USE THIS ANYMORE
+
 import React, { useRef, useEffect, useState } from "react";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import GeocoderService from "@mapbox/mapbox-sdk/services/geocoding";

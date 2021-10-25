@@ -15,7 +15,10 @@ body {
 
 #side-nav {
     border: solid black 1px;
-    width: 50%;
+    width: 40%;
+    position: relative;
+    left: 0;
+    height: 100%;
 }
 
 .mapContainer {
@@ -40,4 +43,8 @@ body {
 .marker {
     width: 30px;
     height: 40px;
+}
+
+.searchTarget {
+    border: solid black 1px;
 }

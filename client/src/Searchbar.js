@@ -5,6 +5,7 @@ import GeocoderService from "@mapbox/mapbox-sdk/services/geocoding";
 import { acces_token } from "./accestoken";
 import { updateMapCoordinates } from "./redux/mapState/slice";
 import { markerPosReceived } from "./redux/mapMarker/slice";
+import { targetDataReceived } from "./redux/target/slice";
 const geocoder = GeocoderService({
     accessToken: acces_token,
 });
@@ -21,9 +22,14 @@ export default function Searchbar() {
         console.log(e.target.value);
         const query = e.target.value;
         const response = await geocoder
-            .forwardGeocode({ query, limit: 5 })
+            .forwardGeocode({
+                query,
+                limit: 5,
+                bbox: [-77.210763, 38.803367, -76.853675, 39.052643],
+                // marker: true, -> key does not work
+            })
             .send();
-        console.log("res,", response.body.features);
+        console.log("res,", response);
         setSearch(response.body.features);
         dispatch(searchResultsReceived(response.body.features));
     }
@@ -35,13 +41,14 @@ export default function Searchbar() {
                     <div className="searchResult" key={i}>
                         <p
                             onClick={() => {
+                                dispatch(targetDataReceived(result));
                                 dispatch(markerPosReceived(result));
                                 dispatch(
                                     updateMapCoordinates(
                                         result.geometry.coordinates
                                     )
                                 );
-                                console.log(result.geometry.coordinates);
+                                console.log("check", result);
                             }}
                         >
                             {result.place_name}

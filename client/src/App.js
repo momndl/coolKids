@@ -15,10 +15,12 @@ export default function App() {
     return (
         <>
             <Header />
-            {/* <Usermenu />
-            <Map /> */}
-            <Test />
-            <Searchbar />
+            <main>
+                <Usermenu />
+                {/* <Map /> */}
+                <Test />
+                <Searchbar />
+            </main>
         </>
     );
 }
