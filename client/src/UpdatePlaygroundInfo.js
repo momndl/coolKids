@@ -1,4 +1,7 @@
+import { useSelector } from "react-redux";
+
 export default function UpdatePlaygroundInfo(props) {
+    const target = useSelector((state) => state.target.data);
     function submitHandler(e) {
         e.preventDefault();
 
@@ -13,7 +16,11 @@ export default function UpdatePlaygroundInfo(props) {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ id: props.PlaygrndId, toUpdate: toUpdate }),
+            body: JSON.stringify({
+                id: props.PlaygrndId,
+                toUpdate: toUpdate,
+                target: target,
+            }),
         }).then((resp) =>
             resp
                 .json()
@@ -27,6 +34,7 @@ export default function UpdatePlaygroundInfo(props) {
                     console.log("err in POST /registration.json", err);
                 })
         );
+        props.updateHandler();
     }
     function submitRemoveHandler(e) {
         e.preventDefault();
@@ -56,6 +64,7 @@ export default function UpdatePlaygroundInfo(props) {
                     console.log("err in POST /registration.json", err);
                 })
         );
+        props.updateHandler();
     }
 
     return (

@@ -123,26 +123,35 @@ app.post("/playgrounds/getplayground.json", (req, res) => {
 
     async function getPlaygroundData(id) {
         const getPlaygrdId = await db.getPlaygroundId(id);
-        const { id: PlaygrndId } = getPlaygrdId.rows[0];
-        const toys = await db.getPlaygroundToys(PlaygrndId);
-        const comments = await db.getComments(PlaygrndId);
-
-        const yesToys = [];
-        const noToys = [];
-        for (const key in toys.rows[0]) {
-            if (toys.rows[0][key] == true) {
-                yesToys.push(key);
-            } else if (toys.rows[0][key] == false) {
-                noToys.push(key);
+        console.log("hallo jajadu", getPlaygrdId.rowCount);
+        if (getPlaygrdId.rowCount > 0) {
+            const { id: PlaygrndId } = getPlaygrdId.rows[0];
+            const toys = await db.getPlaygroundToys(PlaygrndId);
+            const comments = await db.getComments(PlaygrndId);
+            console.log("toys", toys);
+            console.log("comments", comments);
+            const yesToys = [];
+            const noToys = [];
+            for (const key in toys.rows[0]) {
+                if (toys.rows[0][key] == true) {
+                    yesToys.push(key);
+                } else if (toys.rows[0][key] == false) {
+                    noToys.push(key);
+                }
             }
+
+            res.json({
+                success: true,
+                yesToys,
+                noToys,
+                PlaygrndId: PlaygrndId,
+                comments: comments.rows,
+            });
+        } else {
+            const message = "No Data added yet, your chance to be the first!";
+            res.json({ success: false, message: message });
         }
 
-        res.json({
-            yesToys,
-            noToys,
-            PlaygrndId: PlaygrndId,
-            comments: comments.rows,
-        });
         // try catch so send error messages =====================================0
     }
     getPlaygroundData(id);
@@ -151,35 +160,54 @@ app.post("/playgrounds/getplayground.json", (req, res) => {
 });
 
 app.post("/playgrounds/upgrade.json", (req, res) => {
-    console.log("post to playgorunds update");
-    const id = req.body.id;
-    const toys = req.body.toUpdate;
-    console.log("body", toys);
-    console.log("id", id);
+    async function updatePlaygrounds() {
+        let id = req.body.id;
 
-    for (let i = 0; i < toys.length; i++) {
-        if (toys[i] == "slide") {
-            db.updateSlide(id);
-            // console.log("update slide");
-        } else if (toys[i] == "swing") {
-            db.updateSwing(id);
-            // console.log("update swing");
-        } else if (toys[i] == "merry") {
-            db.updateMerry(id);
-            //  console.log("update merry");
-        } else if (toys[i] == "sandpit") {
-            db.updateSandpit(id);
-            // console.log("update sandpit");
-        } else if (toys[i] == "climbing") {
-            db.updateClimbing(id);
-            console.log("updated climbing");
-        } else if (toys[i] == "bench") {
-            db.updateBench(id);
-            // console.log("update bench");
+        console.log("EVERYTHING", req.body);
+        if (!id) {
+            const target = req.body.target;
+
+            const playGrndId = await db.addPlayground(
+                target.place_name,
+                target.id,
+                target.center[0],
+                target.center[1]
+            );
+            //console.log("testtttt", playGrndId.rows[0].id);
+            id = playGrndId.rows[0].id;
+            const toyCreation = await db.createToys(id);
+            console.log("hmmmm", toyCreation);
         }
-    }
+        const toys = req.body.toUpdate;
+        console.log("body", toys);
+        console.log("id", id);
 
-    res.json({ success: true });
+        for (let i = 0; i < toys.length; i++) {
+            if (toys[i] == "slide") {
+                db.updateSlide(id);
+                // console.log("update slide"); s
+            } else if (toys[i] == "swing") {
+                db.updateSwing(id);
+                // console.log("update swing");
+            } else if (toys[i] == "merry") {
+                db.updateMerry(id);
+                //  console.log("update merry");
+            } else if (toys[i] == "sandpit") {
+                db.updateSandpit(id);
+                // console.log("update sandpit");
+            } else if (toys[i] == "climbing") {
+                db.updateClimbing(id);
+                console.log("updated climbing");
+            } else if (toys[i] == "bench") {
+                db.updateBench(id);
+                // console.log("update bench");
+            }
+        }
+
+        res.json({ success: true });
+        // neuen spielplatz anlegen
+    }
+    updatePlaygrounds();
     // HERE WE NEED A DB QUERY TO FIND ->
 });
 

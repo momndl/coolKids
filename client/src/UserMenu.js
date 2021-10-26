@@ -8,7 +8,9 @@ export default function Usermenu() {
     const target = useSelector((state) => state.target);
     const [toys, setToys] = useState("");
     const [comments, setComments] = useState("");
+    const [noDataMessage, setNoDataMessage] = useState("");
     const [showUpdateInfo, setShowUpdateInfo] = useState(false);
+
     const dispatch = useDispatch();
 
     function updateHandler() {
@@ -41,15 +43,22 @@ export default function Usermenu() {
                             "RES POST /playgrounds/getplayground.json",
                             resp
                         );
-                        const toys = {
-                            noToys: resp.noToys,
-                            yesToys: resp.yesToys,
-                        };
-                        console.log("toys", toys);
-                        console.log("comments", resp.comments);
-                        console.log("playground id", resp.PlaygrndId);
-                        setToys(toys);
-                        setComments(resp.comments);
+                        if (resp.success) {
+                            const toys = {
+                                noToys: resp.noToys,
+                                yesToys: resp.yesToys,
+                            };
+                            console.log("toys", toys);
+                            console.log("comments", resp.comments);
+                            console.log("playground id", resp.PlaygrndId);
+                            setToys(toys);
+                            setComments(resp.comments);
+                        } else if (!resp.success) {
+                            setToys("");
+                            setComments("");
+                            console.log("dödönt");
+                            setNoDataMessage(resp.message);
+                        }
                     })
                     .catch((err) => {
                         console.log("err in POST /registration.json", err);
@@ -73,6 +82,7 @@ export default function Usermenu() {
                         {target.data.context[0].text}
                     </p>
                     <button> add to favorites </button>
+
                     <div className="hasToysContainer">
                         {toys &&
                             toys.yesToys.map((toy, i) => <p key={i}>{toy}</p>)}
@@ -81,12 +91,19 @@ export default function Usermenu() {
                         {toys &&
                             toys.noToys.map((toy, i) => <p key={i}>{toy}</p>)}
                     </div>
+
                     <div className="commentsContainer">
                         {comments &&
                             comments.map((comment, i) => (
                                 <p key={i}>{comment.comment}</p>
                             ))}
                     </div>
+                    {noDataMessage && (
+                        <>
+                            {" "}
+                            <h3>{noDataMessage}</h3>{" "}
+                        </>
+                    )}
                     <button onClick={updateHandler}>add information</button>
                 </div>
             )}

@@ -146,3 +146,16 @@ module.exports.getComments = (playground_id) => {
 
 // advanced search stuff
 // like this -> SELECT * from playgrounds JOIN toys ON sandpit = true
+module.exports.addPlayground = (name, mapbox_id, longitude, latitude) => {
+    return db.query(
+        ` INSERT INTO playgrounds (name, mapbox_id, longitude, latitude) VALUES
+ ($1, $2, $3, $4 ) RETURNING ID `,
+        [name, mapbox_id, longitude, latitude]
+    );
+};
+
+module.exports.createToys = (playground_id) => {
+    return db.query(`INSERT INTO toys (playground_id) VALUES ($1)`, [
+        playground_id,
+    ]);
+};
