@@ -32,3 +32,4 @@ components
 ===> REST OF TODAY - CLEANUP - SPLIT COMPONENTS => ORGANIZE WORK !awesome done!
 
 to not forget -> geodingsi nach eigener location ändern
+ALSO IMPORTANT => when app mounts, fetch for all rows and add marker to map

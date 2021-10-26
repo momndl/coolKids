@@ -18,7 +18,7 @@ export default function Searchbar() {
     );
     const dispatch = useDispatch();
     useEffect(() => {
-        console.log("searchbar mounted");
+        //console.log("searchbar mounted");
     }, []);
     const [search, setSearch] = useState("");
     const [advancedSearch, setAdvancedSearch] = useState("");

@@ -111,12 +111,118 @@ app.post("/login.json", (req, res) => {
         );
 });
 
-app.post("/playgrounds/search.json", (req, res) => {
-    console.log("post to playgorunds serarch");
+app.post("/playgrounds/getplayground.json", (req, res) => {
+    console.log("fetched getplayground");
+    console.log("data", req.body);
+    const { text, center, id } = req.body;
+    const latitude = center[1];
+    const longitude = center[0];
+    const address = `${req.body.properties.address}, ${req.body.context[0].text} `;
+    console.log("id", id);
+    // === maybe not so difficult, switch playground id to mapbox_id in toys for direct search
 
-    console.log("body", req.body);
-    res.json({ from: "/playgrounds/search", success: true });
+    async function getPlaygroundData(id) {
+        const getPlaygrdId = await db.getPlaygroundId(id);
+        const { id: PlaygrndId } = getPlaygrdId.rows[0];
+        const toys = await db.getPlaygroundToys(PlaygrndId);
+        const comments = await db.getComments(PlaygrndId);
+
+        const yesToys = [];
+        const noToys = [];
+        for (const key in toys.rows[0]) {
+            if (toys.rows[0][key] == true) {
+                yesToys.push(key);
+            } else if (toys.rows[0][key] == false) {
+                noToys.push(key);
+            }
+        }
+
+        res.json({
+            yesToys,
+            noToys,
+            PlaygrndId: PlaygrndId,
+            comments: comments.rows,
+        });
+        // try catch so send error messages =====================================0
+    }
+    getPlaygroundData(id);
+    // {target.data.properties.address},{" "}
+    //                     {target.data.context[0].text}
+});
+
+app.post("/playgrounds/upgrade.json", (req, res) => {
+    console.log("post to playgorunds update");
+    const id = req.body.id;
+    const toys = req.body.toUpdate;
+    console.log("body", toys);
+    console.log("id", id);
+
+    for (let i = 0; i < toys.length; i++) {
+        if (toys[i] == "slide") {
+            db.updateSlide(id);
+            // console.log("update slide");
+        } else if (toys[i] == "swing") {
+            db.updateSwing(id);
+            // console.log("update swing");
+        } else if (toys[i] == "merry") {
+            db.updateMerry(id);
+            //  console.log("update merry");
+        } else if (toys[i] == "sandpit") {
+            db.updateSandpit(id);
+            // console.log("update sandpit");
+        } else if (toys[i] == "climbing") {
+            db.updateClimbing(id);
+            console.log("updated climbing");
+        } else if (toys[i] == "bench") {
+            db.updateBench(id);
+            // console.log("update bench");
+        }
+    }
+
+    res.json({ success: true });
     // HERE WE NEED A DB QUERY TO FIND ->
+});
+
+app.post("/playgrounds/remove.json", (req, res) => {
+    console.log("post to playgorunds update");
+    const id = req.body.id;
+    const toys = req.body.toUpdate;
+    console.log("body", toys);
+    console.log("id", id);
+
+    for (let i = 0; i < toys.length; i++) {
+        if (toys[i] == "slide") {
+            db.removeSlide(id);
+            // console.log("update slide");
+        } else if (toys[i] == "swing") {
+            db.removeSwing(id);
+            // console.log("update swing");
+        } else if (toys[i] == "merry") {
+            db.removeMerry(id);
+            //  console.log("update merry");
+        } else if (toys[i] == "sandpit") {
+            db.removeSandpit(id);
+            // console.log("update sandpit");
+        } else if (toys[i] == "climbing") {
+            db.removeClimbing(id);
+            console.log("updated climbing");
+        } else if (toys[i] == "bench") {
+            db.removeBench(id);
+            // console.log("update bench");
+        }
+    }
+
+    res.json({ success: true });
+});
+
+app.get("/user/getFavorites.json", (req, res) => {
+    const userId = req.session.userId;
+    console.log("userId", userId);
+    db.getFavorite(userId).then((resp) => {
+        console.log("resp fav", resp.rows[0]);
+
+        res.json(resp.rows[0]);
+    });
 });
 
 app.get("/logout", (req, res) => {

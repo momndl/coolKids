@@ -8,12 +8,19 @@ export function mapMarkerReducer(state = null, action) {
             longitude: data.center[0],
         };
         console.log("marker", marker);
-        state = [marker];
+        return [...state, marker];
+    } else if (action.type == "mapMarker/receivedFavMarker") {
+        const data = action.payload.data;
+        console.log("hello moses!", data);
+        const marker = {
+            name: data.name,
+            latitude: parseFloat(data.latitude),
+            longitude: parseFloat(data.longitude),
+        };
+        console.log(marker);
+        //  const msg = action.payload.msg;
+        return [marker];
     }
-    // else if (action.type == "privateMessages/receivedNewMessage") {
-    //     const msg = action.payload.msg;
-    //     return [...state, msg];
-    // }
     return state;
 }
 
@@ -25,9 +32,9 @@ export function markerPosReceived(data) {
     };
 }
 
-// export function privateChatMessageReceived(msg) {
-//     return {
-//         type: "privateMessages/receivedNewMessage",
-//         payload: { msg },
-//     };
-// }
+export function favoriteMarkersReceived(data) {
+    return {
+        type: "mapMarker/receivedFavMarker",
+        payload: { data },
+    };
+}

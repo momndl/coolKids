@@ -77,3 +77,25 @@ body {
     border: red 2px dotted;
     display: flex;
 }
+
+.hasToysContainer {
+    border: solid 1px;
+    color: green;
+}
+
+.noToysContainer {
+    border: solid 1px;
+    color: red;
+}
+
+.updatePlaygroundContainer {
+    background-color: lightcoral;
+    position: absolute;
+    top: 100px;
+    height: 600px;
+    width: 405px;
+}
+
+.markerDiv {
+    background-color: red;
+}

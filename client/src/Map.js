@@ -10,7 +10,9 @@ import "mapbox-gl/dist/mapbox-gl.css";
 const MAPBOX_TOKEN = acces_token; // Set your mapbox token here
 export function Map() {
     const mapState = useSelector((state) => state.mapState);
-    const mapMarker = useSelector((state) => state.mapMarker);
+    const mapMarker = useSelector(
+        (state) => state.mapMarker && state.mapMarker
+    );
     const showMyLocation = useSelector(
         (state) => state.location && state.location.showMyLocation
     );
@@ -57,7 +59,11 @@ export function Map() {
         }
     }, [showMyLocation]); // listen on showMyLocation just for tests, use myPos on geocoder ->
     // proximity	Bias the response to favor results that are closer to this location, provided as two comma-separated coordinates in longitude,latitude order.
-
+    function testhandler() {
+        console.log(
+            "hola, this should open a modal with information about the playground"
+        );
+    }
     useEffect(() => {
         console.log("test");
         console.log("map mounted", viewport);
@@ -78,15 +84,17 @@ export function Map() {
             >
                 <CustomMarker />
                 {mapMarker &&
-                    mapMarker.map((marker) => (
+                    mapMarker.map((marker, i) => (
                         <Marker
-                            key={marker.name}
+                            key={i}
                             longitude={marker.longitude}
                             latitude={marker.latitude}
                             // offsetLeft={-20}
                             // offsetTop={-10}
                         >
-                            <p>{marker.name}</p>
+                            <div className="markerDiv" onClick={testhandler}>
+                                <p>{marker.name}</p>{" "}
+                            </div>
                             <img className="marker" src="pin.png" />
                         </Marker>
                     ))}
