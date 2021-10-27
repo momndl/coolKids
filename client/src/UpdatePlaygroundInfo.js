@@ -1,7 +1,13 @@
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 export default function UpdatePlaygroundInfo(props) {
     const target = useSelector((state) => state.target.data);
+    //const [playgroundId, setPlaygroundId] = useState("");
+    useEffect(() => {
+        console.log("mounted wuhuhuhuh", props);
+    }, []);
+
     function submitHandler(e) {
         e.preventDefault();
 
@@ -26,9 +32,10 @@ export default function UpdatePlaygroundInfo(props) {
                 .json()
                 .then((resp) => {
                     console.log(
-                        "RES POST /playgrounds/getplayground.json",
+                        "RES POST /playgrounds/UPDATEgetplayground.json",
                         resp
                     );
+                    //setPlaygroundId(resp.id);
                 })
                 .catch((err) => {
                     console.log("err in POST /upgrade.json", err);

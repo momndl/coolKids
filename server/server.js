@@ -114,7 +114,7 @@ app.post("/login.json", (req, res) => {
 app.post("/playgrounds/getplayground.json", (req, res) => {
     console.log("fetched getplayground");
     console.log("data", req.body);
-    const { text, center, id } = req.body;
+    const { place_name, center, id } = req.body;
     const latitude = center[1];
     const longitude = center[0];
     const address = `${req.body.properties.address}, ${req.body.context[0].text} `;
@@ -152,8 +152,18 @@ app.post("/playgrounds/getplayground.json", (req, res) => {
                 comments: sortedComments,
             });
         } else {
+            const playgroundId = await db.addPlayground(
+                place_name,
+                id,
+                longitude,
+                latitude
+            );
             const message = "No Data added yet, your chance to be the first!";
-            res.json({ success: false, message: message });
+            res.json({
+                success: false,
+                message: message,
+                id: playgroundId.rows[0].id,
+            });
         }
 
         // try catch so send error messages =====================================0
@@ -164,11 +174,14 @@ app.post("/playgrounds/getplayground.json", (req, res) => {
 });
 
 app.post("/playgrounds/upgrade.json", (req, res) => {
+    console.log("checkup!", req.body);
+
     async function updatePlaygrounds() {
         let id = req.body.id;
-
+        console.log("idcheck1", id);
         console.log("EVERYTHING", req.body);
-        if (!id) {
+        if (!req.body.id) {
+            console.log("idcheck2", id);
             const target = req.body.target;
 
             const playGrndId = await db.addPlayground(
@@ -185,6 +198,10 @@ app.post("/playgrounds/upgrade.json", (req, res) => {
         const toys = req.body.toUpdate;
         console.log("body", toys);
         console.log("id", id);
+        const myToys = await db.getPlaygroundToys(id);
+        if (myToys.rowCount == 0) {
+            db.createToys(id);
+        }
 
         for (let i = 0; i < toys.length; i++) {
             if (toys[i] == "slide") {
@@ -208,11 +225,11 @@ app.post("/playgrounds/upgrade.json", (req, res) => {
             }
         }
 
-        res.json({ success: true });
+        res.json({ success: true, id: id });
         // neuen spielplatz anlegen
     }
     updatePlaygrounds();
-    // HERE WE NEED A DB QUERY TO FIND ->
+    //HERE WE NEED A DB QUERY TO FIND ->
 });
 
 app.post("/playgrounds/remove.json", (req, res) => {
@@ -272,7 +289,7 @@ app.post("/playgrounds/addFavorite.json", (req, res) => {
                 target.data.center[0],
                 target.data.center[1]
             );
-
+            db.createToys(playGrndId.rows[0].id);
             playgroundId = playGrndId.rows[0].id;
         } else {
             playgroundId = playgroundCheck.rows[0].id;

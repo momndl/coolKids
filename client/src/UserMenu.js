@@ -16,7 +16,8 @@ export default function Usermenu() {
     const [showUpdateInfo, setShowUpdateInfo] = useState(false);
     const [addFavorite, setAddFavorite] = useState("");
     const [removeFavorite, setRemoveFavorite] = useState("");
-    const [addRemoveBtnText, setAddRemoveBtnText] = useState("add as favorite");
+    const [playgroundId, setplaygroundId] = useState("");
+    const [addRemoveBtnText, setAddRemoveBtnText] = useState("add as favorite"); // we dont use this
 
     const dispatch = useDispatch();
 
@@ -92,11 +93,6 @@ export default function Usermenu() {
     useEffect(() => {
         console.log("menu mounted", target);
         if (target) {
-            console.log("here we go, target id", target.data.id);
-            console.log(
-                "here we also go, fav id",
-                favoriteMarkers[0].mapbox_id
-            );
             for (let i = 0; i < favoriteMarkers.length; i++) {
                 if (target.data.id == favoriteMarkers[i].mapbox_id) {
                     setAddFavorite(false);
@@ -127,17 +123,19 @@ export default function Usermenu() {
                                 noToys: resp.noToys,
                                 yesToys: resp.yesToys,
                             };
-                            console.log("toys", toys);
-                            console.log("comments", resp.comments);
-                            console.log("playground id", resp.PlaygrndId);
+                            // console.log("toys", toys);
+                            // console.log("comments", resp.comments);
+                            // console.log("playground id", resp.PlaygrndId);
                             setToys(toys);
                             setComments(resp.comments);
+                            setplaygroundId(resp.PlaygrndId);
                             setNoDataMessage("");
                         } else if (!resp.success) {
                             setToys("");
                             setComments("");
                             console.log("dödönt");
                             setNoDataMessage(resp.message);
+                            setplaygroundId(resp.id);
                         }
                     })
                     .catch((err) => {
@@ -204,7 +202,7 @@ export default function Usermenu() {
                     updateHandler={updateHandler}
                     name={target.data.text}
                     address={target.data.properties.address}
-                    PlaygrndId={toys.PlaygrndId}
+                    PlaygrndId={playgroundId}
                 />
             )}
         </nav>
