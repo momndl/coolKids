@@ -4,6 +4,7 @@ import { mapStateReducer } from "./mapState/slice";
 import { mapMarkerReducer } from "./mapMarker/slice";
 import { myLocationReducer } from "./location/slice";
 import { targetLocationReducer } from "./target/slice";
+import { targetMarkerReducer } from "./targetMarker/slice";
 
 const rootReducer = combineReducers({
     searchResults: searchResultsReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
     mapMarker: mapMarkerReducer,
     location: myLocationReducer,
     target: targetLocationReducer,
+    targetMarker: targetMarkerReducer,
 });
 
 export default rootReducer;

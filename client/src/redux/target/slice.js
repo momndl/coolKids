@@ -18,3 +18,5 @@ export function targetDataReceived(data) {
         payload: { data },
     };
 }
+
+// === dispatch from map is an array, we need object

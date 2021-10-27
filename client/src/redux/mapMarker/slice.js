@@ -1,39 +1,48 @@
 export function mapMarkerReducer(state = null, action) {
     if (action.type == "mapMarker/receivedMarker") {
-        console.log("hello", action.payload.data);
-        const data = action.payload.data;
-        const marker = {
-            name: data.text,
-            latitude: data.center[1],
-            longitude: data.center[0],
-        };
-        console.log("marker", marker);
-        return [...state];
+        const targetMarker = action.payload.data;
+        const spreadstate = [...state];
+        console.log("state", state);
+        console.log("copy", spreadstate[1]);
+        if (spreadstate[1]) {
+            console.log("okaycool");
+            spreadstate.pop();
+            spreadstate.push(targetMarker);
+            console.log("so isses", spreadstate);
+            console.log("so solls", state);
+            //return [spreadstate];
+        }
+        //return [...state, { target: targetMarker }];
+        // this might not be needed anymore, check if theres time
     } else if (action.type == "mapMarker/receivedFavMarker") {
         const data = action.payload.data;
-        console.log("hello moses!", data);
-        console.log("length", data.length);
         const markers = [];
         for (let i = 0; i < data.length; i++) {
-            console.log("mhhhh", data[i]);
             markers.push(data[i]);
         }
 
-        console.log("markers:", markers);
         //  const msg = action.payload.msg;
         return [{ favorites: markers }];
     } else if (action.type == "mapMarker/removeFavMarker") {
         const toRemove = action.payload.data;
-
-        const spreadState = [...state];
-
-        console.log("WWTTFF", spreadState[0].favorites);
-        console.log("WTF!", spreadState);
         const newFavs = state[0].favorites.filter(
             (fav) => fav.mapbox_id != toRemove.id
         );
-
         return [{ favorites: newFavs }];
+    } else if (action.type == "mapMarker/addNewFavMarker") {
+        console.log("state", state);
+        const newState = [...state[0].favorites];
+        console.log("dingsi", action.payload.data);
+        const data = action.payload.data;
+        const newMarker = {
+            name: data.place_name,
+            mapbox_id: data.id,
+            longitude: data.center[0],
+            latitude: data.center[1],
+        };
+        newState.push(newMarker);
+
+        return [{ favorites: newState }];
     }
     return state;
 }
@@ -56,6 +65,13 @@ export function favoriteMarkersReceived(data) {
 export function removeFavoriteMarker(data) {
     return {
         type: "mapMarker/removeFavMarker",
+        payload: { data },
+    };
+}
+
+export function addFavoriteMarker(data) {
+    return {
+        type: "mapMarker/addNewFavMarker",
         payload: { data },
     };
 }

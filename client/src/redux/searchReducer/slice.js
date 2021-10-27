@@ -18,7 +18,7 @@ export function searchResultsReceived(res) {
     };
 }
 
-// export function privateChatMessageReceived(msg) {
+// export function removeSearchResult(msg) {
 //     return {
 //         type: "privateMessages/receivedNewMessage",
 //         payload: { msg },

@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import UpdatePlaygroundInfo from "./UpdatePlaygroundInfo";
-import { removeFavoriteMarker } from "./redux/mapMarker/slice";
+import {
+    removeFavoriteMarker,
+    addFavoriteMarker,
+} from "./redux/mapMarker/slice";
 
 import Searchbar from "./Searchbar";
 
@@ -42,6 +45,8 @@ export default function Usermenu() {
                 .then((resp) => {
                     console.log("RES POST /playgrounds/removeFAV.json", resp);
                     if (resp.success) {
+                        setRemoveFavorite(false);
+                        setAddFavorite(true);
                         console.log("success!, dispatch now", target.data);
                         dispatch(removeFavoriteMarker(target.data));
                     }
@@ -70,6 +75,9 @@ export default function Usermenu() {
                 .then((resp) => {
                     console.log("RES POST /playgrounds/addFAV.json", resp);
                     if (resp.success) {
+                        setRemoveFavorite(true);
+                        setAddFavorite(false);
+                        dispatch(addFavoriteMarker(target.data));
                         console.log("succes adding fav");
                     } else if (!resp.success) {
                         console.log("no succes adding fav");

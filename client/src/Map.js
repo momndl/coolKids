@@ -4,16 +4,22 @@ import React, { useRef, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { mapStateReceived, updateMapState } from "./redux/mapState/slice";
 import { locationInitPosReceived } from "./redux/location/slice";
+import { updateMapCoordinates } from "./redux/mapState/slice";
 import CustomMarker from "./label";
 import "mapbox-gl/dist/mapbox-gl.css";
+import GeocoderService from "@mapbox/mapbox-sdk/services/geocoding";
+import { targetDataReceived } from "./redux/target/slice";
 
 const MAPBOX_TOKEN = acces_token; // Set your mapbox token here
+const geocoder = GeocoderService({
+    accessToken: acces_token,
+});
 export function Map() {
     const mapState = useSelector((state) => state.mapState);
     const searchResults = useSelector((state) => state.searchResults);
-    // const mapMarker = useSelector(
-    //     (state) => state.mapMarker && state.mapMarker.klicks // temporarily changed to get fav markers
-    // );
+    const targetMarker = useSelector(
+        (state) => state.targetMarker && state.targetMarker
+    );
     const favoriteMarkers = useSelector(
         (state) => state.mapMarker && state.mapMarker[0].favorites
     );
@@ -65,14 +71,39 @@ export function Map() {
         }
     }, [showMyLocation]); // listen on showMyLocation just for tests, use myPos on geocoder ->
     // proximity	Bias the response to favor results that are closer to this location, provided as two comma-separated coordinates in longitude,latitude order.
-    function testhandler() {
+    async function testhandler(e) {
         console.log(
             "hola, this should open a modal with information about the playground"
         );
+        const query = e.target.innerText;
+        const targetMarker = favoriteMarkers.filter(
+            (marker) => marker.name == query
+        );
+        console.log(targetMarker);
+        const coordinates = [
+            parseFloat(targetMarker[0].longitude),
+            parseFloat(targetMarker[0].latitude),
+        ];
+
+        dispatch(updateMapCoordinates(coordinates));
+        const response = await geocoder
+            .forwardGeocode({
+                query,
+                limit: 1,
+                //routing: true, // think i dont need it
+                // proximity: proxi, // LAT AND LONG -> now hard coded, we need this from myLocation const
+                types: ["poi"],
+                // bbox: [-77.210763, 38.803367, -76.853675, 39.052643], bbox	Limit results to only those contained within the supplied bounding box. Bounding boxes should be supplied as four numbers separated by commas, in minLon,minLat,maxLon,maxLat order. The bounding box cannot cross the 180th meridian.
+                // marker: true, -> key does not work
+            })
+            .send()
+            .catch((e) => console.log("no search value", e));
+
+        console.log("huhu", response.body.features);
+        // dispatch(targetDataReceived(response.body.features));
     }
+
     useEffect(() => {
-        console.log("test");
-        console.log("map mounted", viewport);
         //console.log("mapmarker", mapMarker);
         dispatch(mapStateReceived(viewport));
         //setViewport(mapState);
@@ -90,22 +121,6 @@ export function Map() {
                 }}
             >
                 <CustomMarker />
-                {searchResults &&
-                    searchResults.map((result, i) => (
-                        <Marker
-                            key={i}
-                            longitude={result.center[0]}
-                            latitude={result.center[1]}
-                        >
-                            <div
-                                className="searchMarkerDiv"
-                                onClick={testhandler}
-                            >
-                                <p>{result.text}</p>{" "}
-                            </div>
-                            <img className="marker" src="pin.png" />
-                        </Marker>
-                    ))}
                 {favoriteMarkers &&
                     favoriteMarkers.map((marker, i) => (
                         <Marker
@@ -115,29 +130,55 @@ export function Map() {
                         >
                             <div
                                 className="favoriteMarkerDiv"
-                                onClick={testhandler}
+                                onClick={(e) => testhandler(e)}
                             >
                                 <p>{marker.name}</p>{" "}
                             </div>
-                            <img className="marker" src="pin.png" />
+                            <img
+                                onClick={testhandler}
+                                className="marker"
+                                src="pin.png"
+                            />
+                        </Marker>
+                    ))}
+                {searchResults &&
+                    searchResults.map((result, i) => (
+                        <Marker
+                            key={i}
+                            longitude={result.center[0]}
+                            latitude={result.center[1]}
+                        >
+                            <div
+                                className="searchMarkerDiv"
+                                onClick={(e) => testhandler(e)}
+                            >
+                                <p>{result.text}</p>{" "}
+                            </div>
+                            <img
+                                onClick={testhandler}
+                                className="marker"
+                                src="pin.png"
+                            />
                         </Marker>
                     ))}
 
-                {/* {mapMarker &&
-                    mapMarker.map((marker, i) => (
+                {targetMarker &&
+                    targetMarker.map((marker, i) => (
                         <Marker
                             key={i}
-                            longitude={marker.longitude}
-                            latitude={marker.latitude}
-                            // offsetLeft={-20}
-                            // offsetTop={-10}
+                            longitude={marker.center[0]}
+                            latitude={marker.center[1]}
                         >
                             <div className="markerDiv" onClick={testhandler}>
-                                <p>{marker.name}</p>{" "}
+                                <p>{marker.place_name}</p>{" "}
                             </div>
-                            <img className="marker" src="pin.png" />
+                            <img
+                                onClick={testhandler}
+                                className="marker"
+                                src="pin.png"
+                            />
                         </Marker>
-                    ))} */}
+                    ))}
                 {showMyLocation && (
                     <GeolocateControl
                         style={geolocateStyle}
