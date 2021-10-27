@@ -5,7 +5,7 @@ body {
 }
 
 #root {
-    border: solid yellow 10px;
+    /* border: solid yellow 10px; */
     height: 100vh;
 }
 
@@ -98,4 +98,16 @@ body {
 
 .markerDiv {
     background-color: red;
+}
+
+.searchMarkerDiv {
+    background-color: blue;
+}
+
+.favoriteMarkerDiv {
+    background-color: lightgreen;
+}
+
+.soloComment {
+    border: dotted 1px black;
 }

@@ -127,6 +127,13 @@ module.exports.addFavorite = (playground_id, user_id) => {
     );
 };
 
+module.exports.removeFavorite = (playground_id, user_id) => {
+    return db.query(
+        `DELETE FROM favorites WHERE playground_id =$1 AND user_id =$2`,
+        [playground_id, user_id]
+    );
+};
+
 // this on first fetch?
 module.exports.getFavorite = (user_id) => {
     return db.query(
@@ -137,10 +144,10 @@ module.exports.getFavorite = (user_id) => {
 };
 
 //get comments on playgrounds
-module.exports.getComments = (playground_id) => {
+module.exports.getComments = () => {
     return db.query(
-        `SELECT id, comment, user_id FROM comments WHERE playground_id = $1`,
-        [playground_id]
+        `SELECT comment, playground_id, users.first, users.last, TO_CHAR(comments.created_at, 'HH24:MI DD.MM.YY') AS posted FROM comments JOIN users ON comments.user_id=users.id`,
+        []
     );
 };
 
@@ -159,3 +166,5 @@ module.exports.createToys = (playground_id) => {
         playground_id,
     ]);
 };
+
+// select comment, users.first, users.last, TO_CHAR(comments.created_at, 'HH24:MI DD.MM.YY') AS posted from comments WHERE playground_id =1 join users on comments.user_id=users.id

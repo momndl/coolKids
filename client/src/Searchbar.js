@@ -51,7 +51,7 @@ export default function Searchbar() {
         const response = await geocoder
             .forwardGeocode({
                 query,
-                limit: 5,
+                limit: 10,
                 //routing: true, // think i dont need it
                 // proximity: proxi, // LAT AND LONG -> now hard coded, we need this from myLocation const
                 // types: ["poi", "postcode"], ==== COMMENTED OUT, maybe not neccessaire
@@ -68,6 +68,7 @@ export default function Searchbar() {
 
         //console.log("res,", response);
         setSearch(response.body.features);
+        dispatch(searchResultsReceived(response.body.features));
         //dispatch(searchResultsReceived(response.body.features));
     }
     return (

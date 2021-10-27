@@ -127,9 +127,13 @@ app.post("/playgrounds/getplayground.json", (req, res) => {
         if (getPlaygrdId.rowCount > 0) {
             const { id: PlaygrndId } = getPlaygrdId.rows[0];
             const toys = await db.getPlaygroundToys(PlaygrndId);
-            const comments = await db.getComments(PlaygrndId);
+            const comments = await db.getComments();
+            const sortedComments = comments.rows.filter(
+                (comment) => comment.playground_id == PlaygrndId
+            );
             console.log("toys", toys);
             console.log("comments", comments);
+            console.log("sortedCommis", sortedComments);
             const yesToys = [];
             const noToys = [];
             for (const key in toys.rows[0]) {
@@ -145,7 +149,7 @@ app.post("/playgrounds/getplayground.json", (req, res) => {
                 yesToys,
                 noToys,
                 PlaygrndId: PlaygrndId,
-                comments: comments.rows,
+                comments: sortedComments,
             });
         } else {
             const message = "No Data added yet, your chance to be the first!";
@@ -247,10 +251,63 @@ app.get("/user/getFavorites.json", (req, res) => {
     const userId = req.session.userId;
     console.log("userId", userId);
     db.getFavorite(userId).then((resp) => {
-        console.log("resp fav", resp.rows[0]);
+        console.log("resp fav", resp.rows);
 
-        res.json(resp.rows[0]);
+        res.json(resp.rows);
     });
+});
+
+app.post("/playgrounds/addFavorite.json", (req, res) => {
+    const target = req.body;
+    const userId = req.session.userId;
+    let playgroundId = 0;
+
+    async function addFavorite() {
+        const playgroundCheck = await db.getPlaygroundId(target.data.id);
+
+        if (playgroundCheck.rowCount == 0) {
+            const playGrndId = await db.addPlayground(
+                target.data.place_name,
+                target.data.id,
+                target.data.center[0],
+                target.data.center[1]
+            );
+
+            playgroundId = playGrndId.rows[0].id;
+        } else {
+            playgroundId = playgroundCheck.rows[0].id;
+        }
+
+        db.addFavorite(playgroundId, userId)
+            .then(() => {
+                res.json({ success: true });
+            })
+            .catch((err) => {
+                console.log("error while adding Favorite", err);
+                res.json({ success: false });
+            });
+    }
+    addFavorite();
+});
+
+app.post("/playgrounds/removeFavorite.json", (req, res) => {
+    const userId = req.session.userId;
+    const target = req.body;
+
+    async function removeFavorite() {
+        const playgroundCheck = await db.getPlaygroundId(target.data.id);
+        const playgroundId = playgroundCheck.rows[0].id;
+        db.removeFavorite(playgroundId, userId)
+            .then(() => {
+                res.json({ success: true });
+            })
+            .catch((err) => {
+                console.log("error while adding Favorite", err);
+                res.json({ success: false });
+            });
+    }
+
+    removeFavorite();
 });
 
 app.get("/logout", (req, res) => {

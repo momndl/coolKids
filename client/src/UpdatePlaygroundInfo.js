@@ -10,7 +10,7 @@ export default function UpdatePlaygroundInfo(props) {
         for (let i = 0; i < checked.length; i++) {
             toUpdate.push(checked[i].id);
         }
-        console.log("checked:", toUpdate);
+
         fetch("/playgrounds/upgrade.json", {
             method: "POST",
             headers: {
@@ -31,7 +31,7 @@ export default function UpdatePlaygroundInfo(props) {
                     );
                 })
                 .catch((err) => {
-                    console.log("err in POST /registration.json", err);
+                    console.log("err in POST /upgrade.json", err);
                 })
         );
         props.updateHandler();
@@ -61,7 +61,7 @@ export default function UpdatePlaygroundInfo(props) {
                     );
                 })
                 .catch((err) => {
-                    console.log("err in POST /registration.json", err);
+                    console.log("err in POST /remove.json", err);
                 })
         );
         props.updateHandler();

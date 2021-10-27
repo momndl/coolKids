@@ -16,7 +16,7 @@ export default function App() {
             resp
                 .json()
                 .then((resp) => {
-                    console.log("RES GET /user/getFavorites", resp);
+                    console.log("RES GET FAVORITES IN APP", resp);
                     dispatch(favoriteMarkersReceived(resp));
                 })
                 .catch((err) => {

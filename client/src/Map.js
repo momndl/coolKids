@@ -10,8 +10,12 @@ import "mapbox-gl/dist/mapbox-gl.css";
 const MAPBOX_TOKEN = acces_token; // Set your mapbox token here
 export function Map() {
     const mapState = useSelector((state) => state.mapState);
-    const mapMarker = useSelector(
-        (state) => state.mapMarker && state.mapMarker
+    const searchResults = useSelector((state) => state.searchResults);
+    // const mapMarker = useSelector(
+    //     (state) => state.mapMarker && state.mapMarker.klicks // temporarily changed to get fav markers
+    // );
+    const favoriteMarkers = useSelector(
+        (state) => state.mapMarker && state.mapMarker[0].favorites
     );
     const showMyLocation = useSelector(
         (state) => state.location && state.location.showMyLocation
@@ -19,8 +23,8 @@ export function Map() {
     const dispatch = useDispatch();
     let myPos;
     const [viewport, setViewport] = useState({
-        width: "100%",
-        height: 600,
+        width: 1470,
+        height: 830,
         latitude: 52.516806,
         longitude: 13.383309,
         zoom: 8,
@@ -34,6 +38,8 @@ export function Map() {
 
     useEffect(() => {
         if (showMyLocation) {
+            console.log("TEST", favoriteMarkers);
+            console.log("TEST2", searchResults);
             const options = {
                 enableHighAccuracy: true,
                 timeout: 5000,
@@ -67,6 +73,7 @@ export function Map() {
     useEffect(() => {
         console.log("test");
         console.log("map mounted", viewport);
+        //console.log("mapmarker", mapMarker);
         dispatch(mapStateReceived(viewport));
         //setViewport(mapState);
     }, []);
@@ -83,7 +90,40 @@ export function Map() {
                 }}
             >
                 <CustomMarker />
-                {mapMarker &&
+                {searchResults &&
+                    searchResults.map((result, i) => (
+                        <Marker
+                            key={i}
+                            longitude={result.center[0]}
+                            latitude={result.center[1]}
+                        >
+                            <div
+                                className="searchMarkerDiv"
+                                onClick={testhandler}
+                            >
+                                <p>{result.text}</p>{" "}
+                            </div>
+                            <img className="marker" src="pin.png" />
+                        </Marker>
+                    ))}
+                {favoriteMarkers &&
+                    favoriteMarkers.map((marker, i) => (
+                        <Marker
+                            key={i}
+                            longitude={parseFloat(marker.longitude)}
+                            latitude={parseFloat(marker.latitude)}
+                        >
+                            <div
+                                className="favoriteMarkerDiv"
+                                onClick={testhandler}
+                            >
+                                <p>{marker.name}</p>{" "}
+                            </div>
+                            <img className="marker" src="pin.png" />
+                        </Marker>
+                    ))}
+
+                {/* {mapMarker &&
                     mapMarker.map((marker, i) => (
                         <Marker
                             key={i}
@@ -97,7 +137,7 @@ export function Map() {
                             </div>
                             <img className="marker" src="pin.png" />
                         </Marker>
-                    ))}
+                    ))} */}
                 {showMyLocation && (
                     <GeolocateControl
                         style={geolocateStyle}
