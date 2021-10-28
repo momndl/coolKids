@@ -2,14 +2,11 @@ export function mapMarkerReducer(state = null, action) {
     if (action.type == "mapMarker/receivedMarker") {
         const targetMarker = action.payload.data;
         const spreadstate = [...state];
-        console.log("state", state);
-        console.log("copy", spreadstate[1]);
+
         if (spreadstate[1]) {
-            console.log("okaycool");
             spreadstate.pop();
             spreadstate.push(targetMarker);
-            console.log("so isses", spreadstate);
-            console.log("so solls", state);
+
             //return [spreadstate];
         }
         //return [...state, { target: targetMarker }];

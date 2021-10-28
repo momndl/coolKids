@@ -22,17 +22,20 @@ export default function Searchbar() {
     }, []);
     const [search, setSearch] = useState("");
     const [advancedSearch, setAdvancedSearch] = useState("");
-    const myLocation = useSelector(
-        (state) => state.location && state.location.data
-    );
+    // const myLocation = useSelector(
+    //     (state) => state.location && state.location.data
+    // );
+    const [query, setQuery] = useState();
     // const state = useSelector((state) => state.state);
     function advancedSearchHandler() {
         if (!advancedSearch) {
             setAdvancedSearch(true);
             setSearch("");
+            dispatch(targetDataReceived(null));
         } else {
             setAdvancedSearch(false);
             setSearch("");
+            dispatch(targetDataReceived(null));
         }
     }
     function toggleMyLocation() {
@@ -44,18 +47,16 @@ export default function Searchbar() {
     }
     // POSSIBLE HANDLER IN STORAGE.js
     async function searchHandler(e) {
-        //const proxi = myLocation.pos.reverse();
-        //console.log("proxi yay", proxi);
-        console.log("val", e.target.value);
-        const query = e.target.value;
+        setQuery(e.target.value);
         const response = await geocoder
             .forwardGeocode({
                 query,
                 limit: 10,
                 //routing: true, // think i dont need it
-                // proximity: proxi, // LAT AND LONG -> now hard coded, we need this from myLocation const
+                proximity: [13.3967488, 52.4663405],
+
                 types: ["poi"],
-                // bbox: [-77.210763, 38.803367, -76.853675, 39.052643], bbox	Limit results to only those contained within the supplied bounding box. Bounding boxes should be supplied as four numbers separated by commas, in minLon,minLat,maxLon,maxLat order. The bounding box cannot cross the 180th meridian.
+                bbox: [12.790833, 52.294202, 13.739777, 52.729639],
                 // marker: true, -> key does not work
             })
             .send()
@@ -76,28 +77,34 @@ export default function Searchbar() {
             <input type="text" onChange={searchHandler}></input>
             <button onClick={advancedSearchHandler}>advanced search </button>
             <button onClick={toggleMyLocation}>my location</button>
+
             {/* CHANGE DIV STRUCTURE SO WE HAVE RESULT CONTAINER */}
-            {search &&
-                search.map((result, i) => (
-                    <div className="searchResult" key={i}>
-                        <p
-                            onClick={() => {
-                                console.log(result);
-                                dispatch(targetDataReceived(result));
-                                dispatch(targetMarkerReceived(result));
-                                dispatch(
-                                    updateMapCoordinates(
-                                        result.geometry.coordinates
-                                    )
-                                );
-                                setSearch("");
-                                //console.log("check", result);
-                            }}
-                        >
-                            {result.place_name}
-                        </p>
-                    </div>
-                ))}
+            {search && (
+                <div className="searchResultContainer">
+                    {search &&
+                        search.map((result, i) => (
+                            <div className="searchResult" key={i}>
+                                <p
+                                    onClick={() => {
+                                        console.log(result);
+                                        dispatch(targetDataReceived(result));
+                                        dispatch(targetMarkerReceived(result));
+                                        dispatch(
+                                            updateMapCoordinates(
+                                                result.geometry.coordinates
+                                            )
+                                        );
+                                        setSearch("");
+                                        //console.log("check", result);
+                                    }}
+                                >
+                                    {result.place_name}
+                                </p>
+                            </div>
+                        ))}
+                </div>
+            )}
+
             {advancedSearch && <AdvancedSearch />}
         </div>
     );

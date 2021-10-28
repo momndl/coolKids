@@ -1,8 +1,10 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
+import { targetDataReceived } from "./redux/target/slice";
 
 export default function UpdatePlaygroundInfo(props) {
-    const target = useSelector((state) => state.target.data);
+    const dispatch = useDispatch();
+    const target = useSelector((state) => state.target && state.target.data);
     //const [playgroundId, setPlaygroundId] = useState("");
     useEffect(() => {
         console.log("mounted wuhuhuhuh", props);
@@ -35,6 +37,9 @@ export default function UpdatePlaygroundInfo(props) {
                         "RES POST /playgrounds/UPDATEgetplayground.json",
                         resp
                     );
+                    if (resp.success) {
+                        dispatch(targetDataReceived(target));
+                    }
                     //setPlaygroundId(resp.id);
                 })
                 .catch((err) => {
@@ -43,6 +48,42 @@ export default function UpdatePlaygroundInfo(props) {
         );
         props.updateHandler();
     }
+    const keyCheck = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            console.log("tipped in comment", e.target.value);
+
+            fetch("/playgrounds/addComments.json", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    comment: e.target.value,
+                    mapbox_id: target.id,
+                }),
+            }).then((resp) =>
+                resp
+                    .json()
+                    .then((resp) => {
+                        console.log(
+                            "RES POST /playgrounds/addCOMMENT.json",
+                            resp
+                        );
+                        if (resp.success) {
+                            props.updateHandler();
+                            dispatch(targetDataReceived(target));
+                        }
+                        //setPlaygroundId(resp.id);
+                    })
+                    .catch((err) => {
+                        console.log("err in POST /upgrade.json", err);
+                    })
+            );
+
+            e.target.value = "";
+        }
+    };
     function submitRemoveHandler(e) {
         e.preventDefault();
 
@@ -66,12 +107,15 @@ export default function UpdatePlaygroundInfo(props) {
                         "RES POST /playgrounds/getplayground.json",
                         resp
                     );
+                    if (resp.success) {
+                        props.updateHandler();
+                        dispatch(targetDataReceived(target));
+                    }
                 })
                 .catch((err) => {
                     console.log("err in POST /remove.json", err);
                 })
         );
-        props.updateHandler();
     }
 
     return (
@@ -172,6 +216,10 @@ export default function UpdatePlaygroundInfo(props) {
                 <label htmlFor="sandpit">Sandpit</label>
                 <button onClick={(e) => submitRemoveHandler(e)}>submit</button>
             </form>
+            <textarea
+                placeholder="add your comment here"
+                onKeyDown={keyCheck}
+            ></textarea>
         </div>
     );
 }

@@ -75,7 +75,9 @@ body {
 
 #advancedSearchContainer {
     border: red 2px dotted;
+    height: 830px;
     display: flex;
+    flex-direction: column;
 }
 
 .hasToysContainer {
@@ -96,18 +98,62 @@ body {
     width: 405px;
 }
 
-.markerDiv {
+/* .markerDiv {
     background-color: red;
 }
 
-.searchMarkerDiv {
-    background-color: blue;
+.markerDiv p {
+    margin: 0;
+} */
+
+.targetMarker {
+    background-color: rgb(255, 85, 85);
+    margin: 0;
+    transform: translateX(-50%);
 }
 
-.favoriteMarkerDiv {
+/* .searchMarkerDiv {
+    background-color: blue;
+} */
+
+.searchMarker {
+    background-color: lightskyblue;
+    margin: 0;
+    transform: translateX(-50%);
+}
+
+/* .favoriteMarkerDiv {
+     background-color: lightgreen;
+    padding: 5px;
+    transform: translate(-5px, -5px);
+}
+
+.favoriteMarkerDiv p {
+    margin: 0;
+    transform: translateX(-50%);
+}  */
+
+.favoriteMarker {
     background-color: lightgreen;
+    margin: 0;
+    transform: translateX(-50%);
+}
+
+/* .advancedMarkerDiv {
+    background-color: purple;
+    padding: 10px;
+} */
+
+.advancedMarker {
+    margin: 0;
+    transform: translateX(-50%);
+    background-color: purple;
 }
 
 .soloComment {
     border: dotted 1px black;
+}
+
+.searchResultContainer {
+    border: red solid 2px;
 }

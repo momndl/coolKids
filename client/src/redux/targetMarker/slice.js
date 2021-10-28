@@ -1,6 +1,7 @@
 export function targetMarkerReducer(state = null, action) {
     if (action.type == "targetMarker/receivedMarker") {
         const targetMarker = action.payload.data;
+        console.log("okay check it:", targetMarker);
         return [targetMarker];
     } else {
         return state;

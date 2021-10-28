@@ -56,11 +56,11 @@ CREATE TABLE comments(
 
 -- maybe a table for every toy? OR ADD TOYS in playgrounds?
 
-INSERT INTO playgrounds (name, adress, longitude, latitude, mapbox_id) VALUES ('Spielplatz', 'Fröbelstraße, 10405', 13.42735, 52.53987, 'poi.420906818565');
-INSERT INTO playgrounds (name, adress, longitude, latitude, mapbox_id) VALUES ('Spielplatz', 'Wühlischstraße, 10245', 13.46682, 52.50723, 'poi.549755859667');
-INSERT INTO toys(playground_id, slide, swing, climbing, bench, merry, sandpit)VALUES(1, true, true, false, true, true, false);
-INSERT INTO comments(comment, user_id, playground_id)VALUES('great place, great swings', 1, 1);
-INSERT INTO comments(comment, user_id, playground_id)VALUES('great place,  no so great swings', 1, 1);
-INSERT INTO favorites (playground_id, user_id)VALUES(1,1);
+-- INSERT INTO playgrounds (name, adress, longitude, latitude, mapbox_id) VALUES ('Spielplatz', 'Fröbelstraße, 10405', 13.42735, 52.53987, 'poi.420906818565');
+-- INSERT INTO playgrounds (name, adress, longitude, latitude, mapbox_id) VALUES ('Spielplatz', 'Wühlischstraße, 10245', 13.46682, 52.50723, 'poi.549755859667');
+-- INSERT INTO toys(playground_id, slide, swing, climbing, bench, merry, sandpit)VALUES(1, true, true, false, true, true, false);
+-- INSERT INTO comments(comment, user_id, playground_id)VALUES('great place, great swings', 1, 1);
+-- INSERT INTO comments(comment, user_id, playground_id)VALUES('great place,  no so great swings', 1, 1);
+-- INSERT INTO favorites (playground_id, user_id)VALUES(1,1);
 
 

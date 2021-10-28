@@ -151,6 +151,13 @@ module.exports.getComments = () => {
     );
 };
 
+module.exports.addComments = (comment, user_id, playground_id) => {
+    return db.query(
+        `INSERT INTO comments (comment, user_id, playground_id) VALUES ($1, $2, $3) RETURNING id`,
+        [comment, user_id, playground_id]
+    );
+};
+
 // advanced search stuff
 // like this -> SELECT * from playgrounds JOIN toys ON sandpit = true
 module.exports.addPlayground = (name, mapbox_id, longitude, latitude) => {
@@ -166,5 +173,48 @@ module.exports.createToys = (playground_id) => {
         playground_id,
     ]);
 };
+
+module.exports.findPlaygroundWithSlides = () => {
+    return db.query(
+        `SELECT playgrounds.id, playgrounds.name, playgrounds.mapbox_id, playgrounds.longitude, playgrounds.latitude FROM playgrounds JOIN toys ON slide = true AND toys.playground_id = playgrounds.id`,
+        []
+    );
+};
+
+module.exports.findPlaygroundWithSwings = () => {
+    return db.query(
+        `SELECT playgrounds.id, playgrounds.name, playgrounds.mapbox_id, playgrounds.longitude, playgrounds.latitude FROM playgrounds JOIN toys ON swing = true AND toys.playground_id = playgrounds.id`,
+        []
+    );
+};
+
+module.exports.findPlaygroundWithClimbing = () => {
+    return db.query(
+        `SELECT playgrounds.id, playgrounds.name, playgrounds.mapbox_id, playgrounds.longitude, playgrounds.latitude FROM playgrounds JOIN toys ON climbing = true AND toys.playground_id = playgrounds.id`,
+        []
+    );
+};
+
+module.exports.findPlaygroundWithBenches = () => {
+    return db.query(
+        `SELECT playgrounds.id, playgrounds.name, playgrounds.mapbox_id, playgrounds.longitude, playgrounds.latitude FROM playgrounds JOIN toys ON bench = true AND toys.playground_id = playgrounds.id`,
+        []
+    );
+};
+
+module.exports.findPlaygroundWithMerry = () => {
+    return db.query(
+        `SELECT playgrounds.id, playgrounds.name, playgrounds.mapbox_id, playgrounds.longitude, playgrounds.latitude FROM playgrounds JOIN toys ON merry = true AND toys.playground_id = playgrounds.id`,
+        []
+    );
+};
+
+module.exports.findPlaygroundWithSandpits = () => {
+    return db.query(
+        `SELECT playgrounds.id, playgrounds.name, playgrounds.mapbox_id, playgrounds.longitude, playgrounds.latitude FROM playgrounds JOIN toys ON sandpit = true AND toys.playground_id = playgrounds.id`,
+        []
+    );
+};
+// SELECT playgrounds.id, playgrounds.name, playgrounds.mapbox_id, playgrounds.longitude, playgrounds.latitude FROM playgrounds JOIN toys ON swing = true AND toys.playground_id = playgrounds.id;
 
 // select comment, users.first, users.last, TO_CHAR(comments.created_at, 'HH24:MI DD.MM.YY') AS posted from comments WHERE playground_id =1 join users on comments.user_id=users.id

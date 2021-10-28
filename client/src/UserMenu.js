@@ -9,7 +9,7 @@ import {
 import Searchbar from "./Searchbar";
 
 export default function Usermenu() {
-    const target = useSelector((state) => state.target);
+    const target = useSelector((state) => state.target && state.target.data);
     const favoriteMarkers = useSelector(
         (state) => state.mapMarker && state.mapMarker[0].favorites
     );
@@ -17,10 +17,11 @@ export default function Usermenu() {
     const [comments, setComments] = useState("");
     const [noDataMessage, setNoDataMessage] = useState("");
     const [showUpdateInfo, setShowUpdateInfo] = useState(false);
-    const [addFavorite, setAddFavorite] = useState("");
+    const [addFavorite, setAddFavorite] = useState(true);
     const [removeFavorite, setRemoveFavorite] = useState("");
     const [playgroundId, setplaygroundId] = useState("");
     const [addRemoveBtnText, setAddRemoveBtnText] = useState("add as favorite"); // we dont use this
+    const [test, setTest] = useState("");
 
     const dispatch = useDispatch();
 
@@ -85,9 +86,6 @@ export default function Usermenu() {
                 })
                 .catch((err) => {
                     console.log("err in POST /favHandler.json", err);
-                    // setError({
-                    //     error: "Something went wrong with registration",
-                    // });
                 })
         );
 
@@ -102,7 +100,7 @@ export default function Usermenu() {
         console.log("menu mounted", target);
         if (target) {
             for (let i = 0; i < favoriteMarkers.length; i++) {
-                if (target.data.id == favoriteMarkers[i].mapbox_id) {
+                if (target.id == favoriteMarkers[i].mapbox_id) {
                     setAddFavorite(false);
                     setRemoveFavorite(true);
                     break;
@@ -116,7 +114,7 @@ export default function Usermenu() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(target.data),
+                body: JSON.stringify(target),
             }).then((resp) =>
                 resp
                     .json()
@@ -138,13 +136,24 @@ export default function Usermenu() {
                             setComments(resp.comments);
                             setplaygroundId(resp.PlaygrndId);
                             setNoDataMessage("");
+
+                            if (
+                                !resp.noToys.length &&
+                                !resp.yesToys.length &&
+                                !comments.length
+                            ) {
+                                setNoDataMessage(
+                                    "No Data added yet, your chance to be the first!"
+                                );
+                            }
                         } else if (!resp.success) {
                             setToys("");
                             setComments("");
-                            console.log("dödönt");
                             setNoDataMessage(resp.message);
                             setplaygroundId(resp.id);
                         }
+                        setTest(true);
+                        console.log(test);
                     })
                     .catch((err) => {
                         console.log("err in POST /registration.json", err);
@@ -162,11 +171,8 @@ export default function Usermenu() {
 
             {target && (
                 <div className="searchTarget">
-                    <p>{target.data.text}</p>
-                    <p>
-                        {target.data.properties.address},{" "}
-                        {target.data.context[0].text}
-                    </p>
+                    <p>{target.place_name}</p>
+
                     {addFavorite && (
                         <button onClick={favHandler}> add to favorites </button>
                     )}
@@ -208,8 +214,6 @@ export default function Usermenu() {
             {showUpdateInfo && (
                 <UpdatePlaygroundInfo
                     updateHandler={updateHandler}
-                    name={target.data.text}
-                    address={target.data.properties.address}
                     PlaygrndId={playgroundId}
                 />
             )}
