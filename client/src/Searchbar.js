@@ -25,17 +25,17 @@ export default function Searchbar() {
     // const myLocation = useSelector(
     //     (state) => state.location && state.location.data
     // );
-    const [query, setQuery] = useState();
+    //const [query, setQuery] = useState();
     // const state = useSelector((state) => state.state);
     function advancedSearchHandler() {
         if (!advancedSearch) {
             setAdvancedSearch(true);
             setSearch("");
-            dispatch(targetDataReceived(null));
+            // dispatch(targetDataReceived(null));
         } else {
             setAdvancedSearch(false);
             setSearch("");
-            dispatch(targetDataReceived(null));
+            // dispatch(targetDataReceived(null));
         }
     }
     function toggleMyLocation() {
@@ -47,7 +47,7 @@ export default function Searchbar() {
     }
     // POSSIBLE HANDLER IN STORAGE.js
     async function searchHandler(e) {
-        setQuery(e.target.value);
+        const query = e.target.value;
         const response = await geocoder
             .forwardGeocode({
                 query,
@@ -74,9 +74,17 @@ export default function Searchbar() {
     }
     return (
         <div id="searchbar">
-            <input type="text" onChange={searchHandler}></input>
-            <button onClick={advancedSearchHandler}>advanced search </button>
-            <button onClick={toggleMyLocation}>my location</button>
+            <input
+                type="text"
+                placeholder="search for playgrounds"
+                onChange={searchHandler}
+            ></input>
+            <button className="searchBtn" onClick={advancedSearchHandler}>
+                advanced search
+            </button>
+            <button className="searchBtn" onClick={toggleMyLocation}>
+                my location
+            </button>
 
             {/* CHANGE DIV STRUCTURE SO WE HAVE RESULT CONTAINER */}
             {search && (
@@ -105,7 +113,9 @@ export default function Searchbar() {
                 </div>
             )}
 
-            {advancedSearch && <AdvancedSearch />}
+            {advancedSearch && (
+                <AdvancedSearch toggleAdvSearch={advancedSearchHandler} />
+            )}
         </div>
     );
 }

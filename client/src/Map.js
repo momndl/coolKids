@@ -31,7 +31,7 @@ export function Map() {
     const dispatch = useDispatch();
     let myPos;
     const [viewport, setViewport] = useState({
-        width: 1470,
+        width: 1495,
         height: 830,
         latitude: 52.516806,
         longitude: 13.383309,

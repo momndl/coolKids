@@ -47,25 +47,30 @@ export default function Login() {
 
     return (
         <section id="login">
-            <h2>Login</h2>
-            {error && <h2 className="regError"> {error.error}</h2>}
-            <form>
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="email"
-                    onChange={handleChange}
-                ></input>
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="password"
-                    onChange={handleChange}
-                ></input>
-                <button onClick={(e) => handleLogin(e)}>login</button>
-            </form>
-            <Link to="/">Not registered? Go here!</Link>
-            {/* <Link to="/passwordreset"> forget password?</Link> */}
+            <div className="logoDiv">
+                <img className="regLogo" src="slide.png" />
+                <h1 className="regHeadline"> Cool Kids </h1>
+            </div>
+            <div className="formContainer">
+                <h1 className="headline">Login</h1>
+                {error && <h2 className="regError"> {error.error}</h2>}
+                <form className="regForm">
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="email"
+                        onChange={handleChange}
+                    ></input>
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="password"
+                        onChange={handleChange}
+                    ></input>
+                    <button onClick={(e) => handleLogin(e)}>login</button>
+                    <Link to="/">Not registered? Go here!</Link>
+                </form>
+            </div>
         </section>
     );
 }

@@ -1,8 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { advancedMarkerReceived } from "./redux/advancedSearchMarkers/slice";
+import GeocoderService from "@mapbox/mapbox-sdk/services/geocoding";
+import { acces_token } from "./accestoken";
+import { updateMapCoordinates } from "./redux/mapState/slice";
+import { targetDataReceived } from "./redux/target/slice";
+import { targetMarkerReceived } from "./redux/targetMarker/slice";
+import { triggerReceived } from "./redux/trigger/slice";
 
-export default function AdvancedSearch() {
+export default function AdvancedSearch(props) {
+    const geocoder = GeocoderService({
+        accessToken: acces_token,
+    });
     const dispatch = useDispatch();
     const advancedMarker = useSelector((state) => state.advancedMarker);
     const [error, setError] = useState("");
@@ -37,6 +46,37 @@ export default function AdvancedSearch() {
         );
     }
 
+    async function advancedHandler(e) {
+        console.log("clikk");
+        const query = e.target.innerText;
+        console.log(query);
+        const response = await geocoder
+            .forwardGeocode({
+                query,
+                limit: 1,
+                //routing: true, // think i dont need it
+                // proximity: proxi, // LAT AND LONG -> now hard coded, we need this from myLocation const
+                types: ["poi"],
+                // bbox: [-77.210763, 38.803367, -76.853675, 39.052643], bbox	Limit results to only those contained within the supplied bounding box. Bounding boxes should be supplied as four numbers separated by commas, in minLon,minLat,maxLon,maxLat order. The bounding box cannot cross the 180th meridian.
+                // marker: true, -> key does not work
+            })
+            .send()
+            .catch((e) => console.log("no search value", e));
+        const coordinates = [
+            response.body.features[0].center[0],
+            response.body.features[0].center[1],
+        ];
+        dispatch(updateMapCoordinates(coordinates));
+        console.log(response.body.features[0].center[1]);
+        // lat
+        console.log(response.body.features[0].center[0]);
+        //lang
+        dispatch(targetDataReceived(response.body.features[0]));
+        dispatch(targetMarkerReceived(response.body.features[0]));
+        //dispatch(triggerReceived("go!"));
+        props.toggleAdvSearch();
+    }
+
     function removeResults() {
         setError("");
         dispatch(advancedMarkerReceived(null));
@@ -57,8 +97,7 @@ export default function AdvancedSearch() {
                 {advancedMarker &&
                     advancedMarker.map((result, i) => (
                         <div key={i}>
-                            {" "}
-                            <p>{result.name}</p>{" "}
+                            <p onClick={advancedHandler}>{result.name}</p>{" "}
                         </div>
                     ))}
             </div>

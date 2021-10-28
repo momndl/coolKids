@@ -1,11 +1,12 @@
 export function targetLocationReducer(state = null, action) {
     if (action.type == "target/receivedTargetData") {
-        console.log("hello", action.payload.data);
+        console.log("=====hello====", action.payload.data);
         const data = action.payload.data;
         if (Array.isArray(data)) {
             console.log("ARRAY!");
             return { data: data[0] };
         } else if (data === null) {
+            console.log("=NULL!=");
             return null;
         }
         return { data };

@@ -114,6 +114,7 @@ app.post("/login.json", (req, res) => {
 app.post("/playgrounds/getplayground.json", (req, res) => {
     console.log("fetched getplayground");
     console.log("data", req.body);
+    const userId = req.session.userId;
     const { place_name, center, id } = req.body;
     const latitude = center[1];
     const longitude = center[0];
@@ -158,6 +159,8 @@ app.post("/playgrounds/getplayground.json", (req, res) => {
                 longitude,
                 latitude
             );
+            console.log("id? playground", playgroundId);
+            const toyCreation = await db.createToys(playgroundId.rows[0].id);
             const message = "No Data added yet, your chance to be the first!";
             res.json({
                 success: false,
@@ -283,16 +286,20 @@ app.post("/playgrounds/addFavorite.json", (req, res) => {
     const target = req.body;
     const userId = req.session.userId;
     let playgroundId = 0;
-
+    console.log("target", target);
+    console.log("target.id", target.id);
+    console.log("target.place_name", target.place_name);
+    console.log("target.center[0]", target.center[0]);
+    console.log("target.center[1]", target.center[1]);
     async function addFavorite() {
-        const playgroundCheck = await db.getPlaygroundId(target.data.id);
+        const playgroundCheck = await db.getPlaygroundId(target.id);
 
         if (playgroundCheck.rowCount == 0) {
             const playGrndId = await db.addPlayground(
-                target.data.place_name,
-                target.data.id,
-                target.data.center[0],
-                target.data.center[1]
+                target.place_name,
+                target.id,
+                target.center[0],
+                target.center[1]
             );
             db.createToys(playGrndId.rows[0].id);
             playgroundId = playGrndId.rows[0].id;
@@ -317,7 +324,7 @@ app.post("/playgrounds/removeFavorite.json", (req, res) => {
     const target = req.body;
 
     async function removeFavorite() {
-        const playgroundCheck = await db.getPlaygroundId(target.data.id);
+        const playgroundCheck = await db.getPlaygroundId(target.id);
         const playgroundId = playgroundCheck.rows[0].id;
         db.removeFavorite(playgroundId, userId)
             .then(() => {

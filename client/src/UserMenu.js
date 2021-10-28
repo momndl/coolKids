@@ -5,7 +5,7 @@ import {
     removeFavoriteMarker,
     addFavoriteMarker,
 } from "./redux/mapMarker/slice";
-
+import { targetDataReceived } from "./redux/target/slice";
 import Searchbar from "./Searchbar";
 
 export default function Usermenu() {
@@ -13,6 +13,7 @@ export default function Usermenu() {
     const favoriteMarkers = useSelector(
         (state) => state.mapMarker && state.mapMarker[0].favorites
     );
+    const trigger = useSelector((state) => state.trigger);
     const [toys, setToys] = useState("");
     const [comments, setComments] = useState("");
     const [noDataMessage, setNoDataMessage] = useState("");
@@ -48,8 +49,8 @@ export default function Usermenu() {
                     if (resp.success) {
                         setRemoveFavorite(false);
                         setAddFavorite(true);
-                        console.log("success!, dispatch now", target.data);
-                        dispatch(removeFavoriteMarker(target.data));
+                        console.log("success!, dispatch now", target);
+                        dispatch(removeFavoriteMarker(target));
                     }
                 })
                 .catch((err) => {
@@ -78,7 +79,7 @@ export default function Usermenu() {
                     if (resp.success) {
                         setRemoveFavorite(true);
                         setAddFavorite(false);
-                        dispatch(addFavoriteMarker(target.data));
+                        dispatch(addFavoriteMarker(target));
                         console.log("succes adding fav");
                     } else if (!resp.success) {
                         console.log("no succes adding fav");
@@ -93,8 +94,73 @@ export default function Usermenu() {
     }
 
     useEffect(() => {
-        console.log("menu mounted");
-    }, []);
+        console.log("menu LOOOL", target);
+        if (target) {
+            for (let i = 0; i < favoriteMarkers.length; i++) {
+                if (target.id == favoriteMarkers[i].mapbox_id) {
+                    setAddFavorite(false);
+                    setRemoveFavorite(true);
+                    break;
+                } else {
+                    setAddFavorite(true);
+                    setRemoveFavorite(false);
+                }
+            }
+            fetch("/playgrounds/getplayground.json", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(target),
+            }).then((resp) =>
+                resp
+                    .json()
+                    .then((resp) => {
+                        console.log(
+                            "RES POST /playgrounds/getplayground.json",
+                            resp
+                        );
+
+                        if (resp.success) {
+                            const toys = {
+                                noToys: resp.noToys,
+                                yesToys: resp.yesToys,
+                            };
+                            // console.log("toys", toys);
+                            // console.log("comments", resp.comments);
+                            // console.log("playground id", resp.PlaygrndId);
+                            setToys(toys);
+                            setComments(resp.comments);
+                            setplaygroundId(resp.PlaygrndId);
+                            setNoDataMessage("");
+
+                            if (
+                                !resp.noToys.length &&
+                                !resp.yesToys.length &&
+                                !comments.length
+                            ) {
+                                setNoDataMessage(
+                                    "No Data added yet, your chance to be the first!"
+                                );
+                            }
+                        } else if (!resp.success) {
+                            setToys("");
+                            setComments("");
+                            setNoDataMessage(resp.message);
+                            setplaygroundId(resp.id);
+                        }
+                        setTest(true);
+                        console.log(test);
+                    })
+                    .catch((err) => {
+                        console.log("err in POST /registration.json", err);
+                        // setError({
+                        //     error: "Something went wrong with registration",
+                        // });
+                    })
+            );
+        }
+    }, [trigger]);
 
     useEffect(() => {
         console.log("menu mounted", target);
@@ -165,56 +231,83 @@ export default function Usermenu() {
         }
     }, [target]);
 
+    function closeTarget() {
+        dispatch(targetDataReceived(null));
+    }
+
     return (
         <nav id="side-nav">
             <Searchbar />
 
             {target && (
                 <div className="searchTarget">
-                    <p>{target.place_name}</p>
+                    <span onClick={closeTarget}>X</span>
+                    <p className="searchTitle">{target.place_name}</p>
 
                     {addFavorite && (
-                        <button onClick={favHandler}> add to favorites </button>
+                        <button className="favBtn" onClick={favHandler}>
+                            add to favorites
+                        </button>
                     )}
                     {removeFavorite && (
-                        <button onClick={removeFavHandler}>
+                        <button className="favBtn" onClick={removeFavHandler}>
                             remove as favorite
                         </button>
                     )}
 
-                    <div className="hasToysContainer">
-                        {toys &&
-                            toys.yesToys.map((toy, i) => <p key={i}>{toy}</p>)}
-                    </div>
-                    <div className="noToysContainer">
-                        {toys &&
-                            toys.noToys.map((toy, i) => <p key={i}>{toy}</p>)}
-                    </div>
+                    <ul className="hasToysContainer">
+                        {toys && (
+                            <>
+                                {" "}
+                                <h4>found: </h4>
+                                {toys &&
+                                    toys.yesToys.map((toy, i) => (
+                                        <li key={i}>{toy}</li>
+                                    ))}{" "}
+                            </>
+                        )}
+                    </ul>
+                    <ul className="noToysContainer">
+                        {toys && (
+                            <>
+                                <h4>not found:</h4>
+                                {toys &&
+                                    toys.noToys.map((toy, i) => (
+                                        <li key={i}>{toy}</li>
+                                    ))}
+                            </>
+                        )}
+                    </ul>
+                    {comments && (
+                        <div className="commentsContainer">
+                            {comments &&
+                                comments.map((comment, i) => (
+                                    <div className="soloComment" key={i}>
+                                        <p>{comment.comment}</p>
+                                        <h5>
+                                            {comment.first} {comment.last} ||{" "}
+                                            {comment.posted}
+                                        </h5>
+                                    </div>
+                                ))}
+                        </div>
+                    )}
 
-                    <div className="commentsContainer">
-                        {comments &&
-                            comments.map((comment, i) => (
-                                <div className="soloComment" key={i}>
-                                    <p>{comment.comment}</p>
-                                    <span>
-                                        {comment.first} {comment.last} ||{" "}
-                                        {comment.posted}
-                                    </span>
-                                </div>
-                            ))}
-                    </div>
                     {noDataMessage && (
                         <>
                             <h3>{noDataMessage}</h3>
                         </>
                     )}
-                    <button onClick={updateHandler}>add information</button>
+                    <button className="favBtn" onClick={updateHandler}>
+                        add information
+                    </button>
                 </div>
             )}
             {showUpdateInfo && (
                 <UpdatePlaygroundInfo
                     updateHandler={updateHandler}
                     PlaygrndId={playgroundId}
+                    name={target.place_name}
                 />
             )}
         </nav>

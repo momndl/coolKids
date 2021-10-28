@@ -15,7 +15,10 @@ export default function App() {
     };
     return (
         <div id="header">
-            <p>header</p>
+            <div className="headerLogoDiv">
+                <img className="headerLogo" src="slide.png" />
+                <h1>Cool Kids</h1>
+            </div>
             <span onClick={handleLogout}> logout</span>
         </div>
     );

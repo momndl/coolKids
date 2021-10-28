@@ -7,20 +7,173 @@ body {
 #root {
     /* border: solid yellow 10px; */
     height: 100vh;
+    background-color: antiquewhite;
 }
 
-.searchResult {
-    border: solid black 1px;
+#welcome {
+    height: 100vh;
+    width: 100vw;
+    background-color: lightsalmon;
+}
+
+#registration {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 0.5fr;
+    justify-items: center;
+    align-items: center;
+}
+
+#login {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 0.5fr;
+    justify-items: center;
+    align-items: center;
+}
+
+.regHeadline {
+    font-family: "Indie Flower", cursive;
+    font-size: 8.8em;
+    transform: rotate(12deg);
+    transition: all, 1s;
+    user-select: none;
+}
+
+.regHeadline:hover {
+    color: thistle;
+    transform: rotate(-12deg);
+}
+
+.headline {
+    text-align: center;
+    transform: rotate(354deg);
+    font-size: 2em;
+}
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+
+    font-family: "Lato", sans-serif;
+}
+
+.regForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.regForm input {
+    background-color: rgba(138, 191, 224, 0.288);
+    border-radius: 5px;
+    transition: all, 0.5s;
+    font-size: 1.1em;
+}
+
+.regForm input:hover {
+    background-color: rgba(138, 214, 224, 0.075);
+}
+
+.regForm input:focus {
+    background-color: rgba(138, 214, 224, 0.075);
+}
+
+.regForm button {
+    background-color: rgba(138, 191, 224, 0.288);
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.regForm button:hover {
+    background-color: rgba(138, 214, 224, 0.075);
+}
+
+.regForm a {
+    color: black;
+    margin-top: 10px;
+    text-decoration: none;
+    transition: all, 0.3s;
+}
+
+.regForm a:hover {
+    color: red;
+}
+
+.logoDiv {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.headerLogoDiv {
+    display: flex;
+    align-items: center;
+}
+
+.headerLogoDiv h1 {
+    font-family: "Indie Flower", cursive;
+    font-size: 2em;
+    transform: rotate(12deg);
+    user-select: none;
+    transition: all, 0.8s;
+}
+
+.headerLogoDiv h1:hover {
+    color: hotpink;
+    transform: rotate(-12deg);
+}
+
+.regLogo {
+    height: 500px;
 }
 
 #header {
     height: 100px;
-    border: solid tomato 1px;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 5px;
+    background-color: rgba(255, 160, 122, 0.397);
+}
+
+.headerLogo {
+    height: 80px;
+    color: rgb(236, 236, 200);
+}
+
+#header span {
+    justify-self: end;
+    cursor: pointer;
+    margin-right: 20px;
+    transition: all, 0.4s;
+    font-family: "Lato", sans-serif;
+    font-size: 1.2em;
+}
+
+#header span:hover {
+    color: red;
+}
+
+.searchResult {
+    border: solid black 1px;
+    padding-left: 8px;
+    transition: all 0.4s;
+}
+
+.searchResult:hover {
+    background-color: rgb(250, 225, 215);
+}
+
+.searchResult p {
+    cursor: pointer;
 }
 
 #side-nav {
     border: solid black 1px;
-
+    font-family: "Lato", sans-serif;
     height: 100%;
 }
 
@@ -50,6 +203,36 @@ body {
 
 .searchTarget {
     border: solid black 1px;
+    padding: 10px;
+}
+
+.searchTarget span {
+    cursor: pointer;
+    position: relative;
+    left: 360px;
+    font-size: 1.2em;
+}
+
+.searchTarget span:hover {
+    color: hotpink;
+}
+
+.searchTitle {
+    text-align: center;
+}
+
+.favBtn {
+    color: black;
+    background-color: whitesmoke;
+    margin-left: 200px;
+    border-radius: 5px;
+    transition: all 0.5s;
+    transform: translateX(-50%);
+}
+
+.favBtn:hover {
+    background-color: black;
+    color: whitesmoke;
 }
 
 #appMainContainer {
@@ -63,14 +246,33 @@ body {
 }
 
 #searchbar input {
-    width: 40%;
+    width: 90%;
     display: inline-block;
     margin: 10px;
+    transition: all, 0.5s;
+    border-radius: 5px;
 }
 
-#searchbar button {
-    color: whitesmoke;
+#searchbar input:focus {
+    background-color: rgb(255, 160, 122, 0397);
+}
+
+#searchbar input:hover {
+    background-color: rgba(255, 160, 122, 0.397);
+}
+
+.searchBtn {
+    color: black;
+    background-color: whitesmoke;
+    width: 120px;
+    margin-left: 50px;
+    border-radius: 5px;
+    transition: all 0.5s;
+}
+
+.searchBtn:hover {
     background-color: black;
+    color: whitesmoke;
 }
 
 #advancedSearchContainer {
@@ -78,24 +280,76 @@ body {
     height: 830px;
     display: flex;
     flex-direction: column;
+    align-items: center;
+}
+#advancedSearchContainer button {
+    color: black;
+    background-color: whitesmoke;
+    width: 150px;
+    border-radius: 5px;
+    transition: all 0.5s;
+    margin: 5px;
+}
+
+#advancedSearchContainer button:hover {
+    background-color: black;
+    color: whitesmoke;
 }
 
 .hasToysContainer {
-    border: solid 1px;
     color: green;
 }
 
 .noToysContainer {
-    border: solid 1px;
     color: red;
 }
 
 .updatePlaygroundContainer {
     background-color: lightcoral;
     position: absolute;
-    top: 100px;
-    height: 600px;
+    top: 110px;
+    height: 831px;
     width: 405px;
+    display: grid;
+    grid-template-columns: 20px 1fr 20px;
+    grid-template-rows: 0.5fr 1fr 1fr 1fr;
+}
+
+.updatePlaygroundContainer form {
+    display: flex;
+    flex-direction: column;
+}
+
+.closer {
+    grid-row: 1;
+    grid-column: 3;
+    font-size: 1.3em;
+    margin: 0;
+    cursor: pointer;
+    justify-self: center;
+    display: inline;
+    transition: all, 0.2s;
+}
+
+.closer:hover {
+    font-weight: 800;
+}
+
+.updateGridRow1 {
+    grid-row: 1;
+    grid-column: 2;
+}
+.updateGridRow2 {
+    grid-row: 2;
+    grid-column: 2;
+}
+.updateGridRow3 {
+    grid-row: 3;
+    grid-column: 2;
+}
+.updateGridRow4 {
+    grid-row: 4;
+    grid-column: 2;
 }
 
 /* .markerDiv {
@@ -110,6 +364,7 @@ body {
     background-color: rgb(255, 85, 85);
     margin: 0;
     transform: translateX(-50%);
+    cursor: pointer;
 }
 
 /* .searchMarkerDiv {
@@ -120,6 +375,7 @@ body {
     background-color: lightskyblue;
     margin: 0;
     transform: translateX(-50%);
+    cursor: pointer;
 }
 
 /* .favoriteMarkerDiv {
@@ -134,9 +390,11 @@ body {
 }  */
 
 .favoriteMarker {
-    background-color: lightgreen;
+    background-color: green;
+    padding: 2px;
     margin: 0;
-    transform: translateX(-50%);
+    transform: translate(-50%, -2px);
+    cursor: pointer;
 }
 
 /* .advancedMarkerDiv {
@@ -148,12 +406,36 @@ body {
     margin: 0;
     transform: translateX(-50%);
     background-color: purple;
+    cursor: pointer;
+}
+.commentsContainer {
+    height: 300px;
+    overflow-y: scroll;
 }
 
 .soloComment {
     border: dotted 1px black;
+    transition: all, 0.3s;
 }
 
-.searchResultContainer {
-    border: red solid 2px;
+.soloComment:hover {
+    background-color: rgba(255, 160, 122, 0.397);
+}
+
+.soloComment p {
+    margin: 5px 0 0 20px;
+    font-size: 1.1em;
+}
+
+.soloComment h5 {
+    margin: 5px 0 5px 5px;
+}
+
+.advSearchResults p {
+    cursor: pointer;
+    margin: 15px 10px;
+}
+
+.advSearchResults p:hover {
+    font-weight: 800;
 }

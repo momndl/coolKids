@@ -38,7 +38,7 @@ export default function Registration() {
                         // console.log("check id", this.state);
                     } else {
                         console.log("hat nicht geklappt, sad face");
-                        setError({ error: resp.error });
+                        setError(resp.error);
                     }
                     // depending on whether or not our user successfully registered we now want to do either:
                     // a: user successfully registered, the should be send to the logged in experience, in this
@@ -49,43 +49,49 @@ export default function Registration() {
                 })
                 .catch((err) => {
                     console.log("err in POST /registration.json", err);
-                    setError({ error: resp.error });
+                    setError(resp.error);
                     // update the error property in state!
                 })
         );
     }
     return (
-        <section>
-            <h1>Registration</h1>
-            {error && <h2 className="regError"> {error}</h2>}
-            <form className="regForm">
-                <input
-                    type="text"
-                    name="first"
-                    placeholder="first name"
-                    onChange={handleChange}
-                ></input>
-                <input
-                    type="text"
-                    name="last"
-                    placeholder="last name"
-                    onChange={handleChange}
-                ></input>
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="email"
-                    onChange={handleChange}
-                ></input>
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="password"
-                    onChange={handleChange}
-                ></input>
-                <button onClick={(e) => handleRegister(e)}>register</button>
-                <Link to="/login">Already registered? Please login</Link>
-            </form>
+        <section id="registration">
+            <div className="logoDiv">
+                <img className="regLogo" src="slide.png" />
+                <h1 className="regHeadline"> Cool Kids </h1>
+            </div>
+            <div className="formContainer">
+                <h1 className="headline">Registration</h1>
+                {error && <h2 className="regError"> {error}</h2>}
+                <form className="regForm">
+                    <input
+                        type="text"
+                        name="first"
+                        placeholder="first name"
+                        onChange={handleChange}
+                    ></input>
+                    <input
+                        type="text"
+                        name="last"
+                        placeholder="last name"
+                        onChange={handleChange}
+                    ></input>
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="email"
+                        onChange={handleChange}
+                    ></input>
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="password"
+                        onChange={handleChange}
+                    ></input>
+                    <button onClick={(e) => handleRegister(e)}>register</button>
+                    <Link to="/login">Already registered? Please login</Link>
+                </form>
+            </div>
         </section>
     );
 }
