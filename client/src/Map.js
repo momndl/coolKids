@@ -10,6 +10,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import GeocoderService from "@mapbox/mapbox-sdk/services/geocoding";
 import { targetDataReceived } from "./redux/target/slice";
 import { targetMarkerReceived } from "./redux/targetMarker/slice";
+import { triggerReceived } from "./redux/trigger/slice";
+import LocationMarker from "./locationInfo";
 
 const MAPBOX_TOKEN = acces_token; // Set your mapbox token here
 const geocoder = GeocoderService({
@@ -31,8 +33,8 @@ export function Map() {
     const dispatch = useDispatch();
     let myPos;
     const [viewport, setViewport] = useState({
-        width: 1495,
-        height: 830,
+        width: 1492,
+        height: 825,
         latitude: 52.516806,
         longitude: 13.383309,
         zoom: 8,
@@ -46,16 +48,12 @@ export function Map() {
 
     useEffect(() => {
         if (showMyLocation) {
-            console.log("TEST", favoriteMarkers);
-            console.log("TEST2", searchResults);
-            console.log("TEST3", advancedMarker);
             const options = {
                 enableHighAccuracy: true,
                 timeout: 5000,
                 maximumAge: 0,
             };
             function success(pos) {
-                console.log("pos object", pos);
                 const crd = pos.coords;
                 console.log("Your current position is:");
                 console.log(`Latitude : ${crd.latitude}`);
@@ -65,6 +63,7 @@ export function Map() {
                     pos: [crd.latitude, crd.longitude],
                     accuracy: crd.accuracy,
                 };
+
                 dispatch(locationInitPosReceived(myPos));
             }
             function error(err) {
@@ -75,13 +74,10 @@ export function Map() {
     }, [showMyLocation]); // listen on showMyLocation just for tests, use myPos on geocoder ->
     // proximity	Bias the response to favor results that are closer to this location, provided as two comma-separated coordinates in longitude,latitude order.
     async function favHandler(e) {
-        console.log("FAVHANDLER");
         const query = e.target.innerText;
         const targetMarker = favoriteMarkers.filter(
             (marker) => marker.name == query
         );
-        console.log("target", targetMarker);
-        console.log("query", query);
         const coordinates = [
             parseFloat(targetMarker[0].longitude),
             parseFloat(targetMarker[0].latitude),
@@ -92,27 +88,22 @@ export function Map() {
             .forwardGeocode({
                 query,
                 limit: 1,
-                //routing: true, // think i dont need it
-                // proximity: proxi, // LAT AND LONG -> now hard coded, we need this from myLocation const
+                bbox: [12.790833, 52.294202, 13.739777, 52.729639],
+                proximity: [13.3967488, 52.4663405],
                 types: ["poi"],
-                // bbox: [-77.210763, 38.803367, -76.853675, 39.052643], bbox	Limit results to only those contained within the supplied bounding box. Bounding boxes should be supplied as four numbers separated by commas, in minLon,minLat,maxLon,maxLat order. The bounding box cannot cross the 180th meridian.
-                // marker: true, -> key does not work
             })
             .send()
             .catch((e) => console.log("no search value", e));
-        console.log("response.body.features", response.body.features);
-        //console.log("huhu", response.body.features[0]);
+        dispatch(triggerReceived("go!"));
         dispatch(targetDataReceived(response.body.features[0]));
         dispatch(targetMarkerReceived(response.body.features[0]));
     }
     async function advHandler(e) {
-        console.log("advHANDLER");
         const query = e.target.innerText;
         const targetMarker = advancedMarker.filter(
             (marker) => marker.name == query
         );
-        console.log("target", targetMarker);
-        console.log("query", query);
+
         const coordinates = [
             parseFloat(targetMarker[0].longitude),
             parseFloat(targetMarker[0].latitude),
@@ -123,50 +114,68 @@ export function Map() {
             .forwardGeocode({
                 query,
                 limit: 1,
-                //routing: true, // think i dont need it
-                proximity: [52.4663405, 13.3967488],
+                bbox: [12.790833, 52.294202, 13.739777, 52.729639],
+                proximity: [13.3967488, 52.4663405],
                 types: ["poi"],
-                // bbox: [-77.210763, 38.803367, -76.853675, 39.052643], bbox	Limit results to only those contained within the supplied bounding box. Bounding boxes should be supplied as four numbers separated by commas, in minLon,minLat,maxLon,maxLat order. The bounding box cannot cross the 180th meridian.
-                // marker: true, -> key does not work
             })
             .send()
             .catch((e) => console.log("no search value", e));
-        console.log("response.body.features", response.body);
-        //console.log("huhu", response.body.features[0]);
+        dispatch(triggerReceived("go!"));
         dispatch(targetDataReceived(response.body.features[0]));
         dispatch(targetMarkerReceived(response.body.features[0]));
     }
 
     async function searchHandler(e) {
-        console.log("advHANDLER");
         const query = e.target.innerText;
         const targetMarker = searchResults.filter(
             (marker) => marker.place_name == query
         );
-        console.log("target", targetMarker);
-        console.log("query", query);
+
         const coordinates = [
             parseFloat(targetMarker[0].center[0]),
             parseFloat(targetMarker[0].center[1]),
         ];
-        console.log("coords", coordinates);
+
         dispatch(updateMapCoordinates(coordinates));
         const response = await geocoder
             .forwardGeocode({
                 query,
                 limit: 1,
-                //routing: true, // think i dont need it
-
+                bbox: [12.790833, 52.294202, 13.739777, 52.729639],
+                proximity: [13.3967488, 52.4663405],
                 types: ["poi"],
-                // bbox: [-77.210763, 38.803367, -76.853675, 39.052643], bbox	Limit results to only those contained within the supplied bounding box. Bounding boxes should be supplied as four numbers separated by commas, in minLon,minLat,maxLon,maxLat order. The bounding box cannot cross the 180th meridian.
-                // marker: true, -> key does not work
             })
             .send()
             .catch((e) => console.log("no search value", e));
-        // console.log("response.body.features", response.body);
-        console.log("huhu", response.body.features[0]);
+
+        dispatch(triggerReceived("go!"));
         dispatch(targetDataReceived(response.body.features[0]));
         dispatch(targetMarkerReceived(response.body.features[0]));
+    }
+
+    async function targetHandler(e) {
+        const query = e.target.innerText;
+
+        const response = await geocoder
+            .forwardGeocode({
+                query,
+                limit: 1,
+                bbox: [12.790833, 52.294202, 13.739777, 52.729639],
+                proximity: [13.3967488, 52.4663405],
+                types: ["poi"],
+            })
+            .send()
+            .catch((e) => console.log("no search value", e));
+
+        const coordinates = [
+            response.body.features[0].center[0],
+            response.body.features[0].center[1],
+        ];
+
+        dispatch(triggerReceived("go!"));
+        dispatch(updateMapCoordinates(coordinates));
+        dispatch(targetDataReceived(response.body.features[0]));
+        // dispatch(targetMarkerReceived(response.body.features[0]));
     }
 
     useEffect(() => {
@@ -187,6 +196,7 @@ export function Map() {
                 }}
             >
                 <CustomMarker />
+                {showMyLocation && <LocationMarker />}
                 {advancedMarker &&
                     advancedMarker.map((marker, i) => (
                         <Marker
@@ -194,12 +204,6 @@ export function Map() {
                             longitude={parseFloat(marker.longitude)}
                             latitude={parseFloat(marker.latitude)}
                         >
-                            {/* <div
-                                className="advancedMarkerDiv"
-                                onClick={(e) => testhandler(e)}
-                            >
-                                <p>{marker.name}</p>{" "}
-                            </div> */}
                             <p className="advancedMarker" onClick={advHandler}>
                                 {marker.name}
                             </p>
@@ -213,12 +217,6 @@ export function Map() {
                             longitude={parseFloat(marker.longitude)}
                             latitude={parseFloat(marker.latitude)}
                         >
-                            {/* <div
-                                className="favoriteMarkerDiv"
-                                onClick={(e) => testhandler(e)}
-                            >
-                                <p>{marker.name}</p>{" "}
-                            </div> */}
                             <p onClick={favHandler} className="favoriteMarker">
                                 {marker.name}
                             </p>
@@ -232,12 +230,6 @@ export function Map() {
                             longitude={result.center[0]}
                             latitude={result.center[1]}
                         >
-                            {/* <div
-                                className="searchMarkerDiv"
-                                onClick={(e) => testhandler(e)}
-                            >
-                                <p>{result.text}</p>{" "}
-                            </div> */}
                             <p onClick={searchHandler} className="searchMarker">
                                 {result.place_name}
                             </p>
@@ -252,10 +244,9 @@ export function Map() {
                             longitude={marker.center[0]}
                             latitude={marker.center[1]}
                         >
-                            {/* <div className="markerDiv" onClick={testhandler}>
-                                <p>{marker.place_name}</p>{" "}
-                            </div> */}
-                            <p className="targetMarker">{marker.place_name}</p>
+                            <p onClick={targetHandler} className="targetMarker">
+                                {marker.place_name}
+                            </p>
                             <img className="marker" src="pin.png" />
                         </Marker>
                     ))}

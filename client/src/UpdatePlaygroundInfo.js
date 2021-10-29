@@ -130,105 +130,154 @@ export default function UpdatePlaygroundInfo(props) {
             <div className="updateGridRow2">
                 <p> see something thats not listed?</p>
                 <form>
-                    <input
-                        className="updateCheckbox"
-                        type="checkbox"
-                        id="slide"
-                        name="slide"
-                    />
-                    <label htmlFor="slide">Slide</label>
-                    <input
-                        className="updateCheckbox"
-                        type="checkbox"
-                        id="swing"
-                        name="swing"
-                    />
-                    <label htmlFor="swing">Swing</label>
-                    <input
-                        className="updateCheckbox"
-                        type="checkbox"
-                        id="climbing"
-                        name="climbing"
-                    />
-                    <label htmlFor="climbing">Climbing Options</label>
-                    <input
-                        className="updateCheckbox"
-                        type="checkbox"
-                        id="bench"
-                        name="bench"
-                    />
-                    <label htmlFor="bench">Bench</label>
-                    <input
-                        className="updateCheckbox"
-                        type="checkbox"
-                        id="merry"
-                        name="merry"
-                    />
-                    <label htmlFor="merry">Merry-Go-Rounds</label>
-                    <input
-                        className="updateCheckbox"
-                        type="checkbox"
-                        id="sandpit"
-                        name="sandpit"
-                    />
-                    <label htmlFor="sandpit">Sandpit</label>
-                    <button onClick={(e) => submitHandler(e)}>submit</button>
+                    <label htmlFor="slide">
+                        <input
+                            className="updateCheckbox"
+                            type="checkbox"
+                            id="slide"
+                            name="slide"
+                        />{" "}
+                        Slide
+                    </label>
+
+                    <label htmlFor="swing">
+                        <input
+                            className="updateCheckbox"
+                            type="checkbox"
+                            id="swing"
+                            name="swing"
+                        />{" "}
+                        Swing
+                    </label>
+
+                    <label htmlFor="climbing">
+                        {" "}
+                        <input
+                            className="updateCheckbox"
+                            type="checkbox"
+                            id="climbing"
+                            name="climbing"
+                        />{" "}
+                        Climbing Options
+                    </label>
+
+                    <label htmlFor="bench">
+                        {" "}
+                        <input
+                            className="updateCheckbox"
+                            type="checkbox"
+                            id="bench"
+                            name="bench"
+                        />{" "}
+                        Bench
+                    </label>
+
+                    <label htmlFor="merry">
+                        <input
+                            className="updateCheckbox"
+                            type="checkbox"
+                            id="merry"
+                            name="merry"
+                        />{" "}
+                        Merry-Go-Rounds
+                    </label>
+
+                    <label htmlFor="sandpit">
+                        <input
+                            className="updateCheckbox"
+                            type="checkbox"
+                            id="sandpit"
+                            name="sandpit"
+                        />{" "}
+                        Sandpit
+                    </label>
+                    <button
+                        className="updateBtn"
+                        onClick={(e) => submitHandler(e)}
+                    >
+                        submit
+                    </button>
                 </form>
             </div>
 
             <div className="updateGridRow3">
                 <p> missing something thats listed?</p>
                 <form>
-                    <input
-                        className="updateCheckbox"
-                        type="checkbox"
-                        id="slide"
-                        name="slide"
-                    />
-                    <label htmlFor="slide">Slide</label>
-                    <input
-                        className="updateCheckbox"
-                        type="checkbox"
-                        id="swing"
-                        name="swing"
-                    />
-                    <label htmlFor="swing">Swing</label>
-                    <input
-                        className="updateCheckbox"
-                        type="checkbox"
-                        id="climbing"
-                        name="climbing"
-                    />
-                    <label htmlFor="climbing">Climbing Options</label>
-                    <input
-                        className="updateCheckbox"
-                        type="checkbox"
-                        id="bench"
-                        name="bench"
-                    />
-                    <label htmlFor="bench">Bench</label>
-                    <input
-                        className="updateCheckbox"
-                        type="checkbox"
-                        id="merry"
-                        name="merry"
-                    />
-                    <label htmlFor="merry">Merry-Go-Rounds</label>
-                    <input
-                        className="updateCheckbox"
-                        type="checkbox"
-                        id="sandpit"
-                        name="sandpit"
-                    />
-                    <label htmlFor="sandpit">Sandpit</label>
-                    <button onClick={(e) => submitRemoveHandler(e)}>
+                    <label htmlFor="slide">
+                        <input
+                            className="updateCheckbox"
+                            type="checkbox"
+                            id="slide"
+                            name="slide"
+                        />{" "}
+                        Slide
+                    </label>
+
+                    <label htmlFor="swing">
+                        <input
+                            className="updateCheckbox"
+                            type="checkbox"
+                            id="swing"
+                            name="swing"
+                        />{" "}
+                        Swing
+                    </label>
+
+                    <label htmlFor="climbing">
+                        {" "}
+                        <input
+                            className="updateCheckbox"
+                            type="checkbox"
+                            id="climbing"
+                            name="climbing"
+                        />{" "}
+                        Climbing Options
+                    </label>
+
+                    <label htmlFor="bench">
+                        {" "}
+                        <input
+                            className="updateCheckbox"
+                            type="checkbox"
+                            id="bench"
+                            name="bench"
+                        />{" "}
+                        Bench
+                    </label>
+
+                    <label htmlFor="merry">
+                        <input
+                            className="updateCheckbox"
+                            type="checkbox"
+                            id="merry"
+                            name="merry"
+                        />{" "}
+                        Merry-Go-Rounds
+                    </label>
+
+                    <label htmlFor="sandpit">
+                        <input
+                            className="updateCheckbox"
+                            type="checkbox"
+                            id="sandpit"
+                            name="sandpit"
+                        />{" "}
+                        Sandpit
+                    </label>
+                    <button
+                        className="updateBtn"
+                        onClick={(e) => submitRemoveHandler(e)}
+                    >
                         submit
                     </button>
                 </form>
             </div>
             <div className="updateGridRow4">
+                <p>share your opinion!</p>
                 <textarea
-                    placeholder="add your comment here"
+                    cols="35"
+                    rows="5"
+                    placeholder="Remember, be nice!"
                     onKeyDown={keyCheck}
                 ></textarea>
             </div>

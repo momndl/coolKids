@@ -27,9 +27,8 @@ export function mapMarkerReducer(state = null, action) {
         );
         return [{ favorites: newFavs }];
     } else if (action.type == "mapMarker/addNewFavMarker") {
-        console.log("state", state);
         const newState = [...state[0].favorites];
-        console.log("dingsi", action.payload.data);
+
         const data = action.payload.data;
         const newMarker = {
             name: data.place_name,

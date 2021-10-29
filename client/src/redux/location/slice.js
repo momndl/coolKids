@@ -1,6 +1,5 @@
 export function myLocationReducer(state = null, action) {
     if (action.type == "location/initLocationReceived") {
-        console.log("hello", action.payload.pos);
         const data = action.payload.pos;
         if (state) {
             return { ...state, data };
@@ -8,7 +7,6 @@ export function myLocationReducer(state = null, action) {
             return { data };
         }
     } else if (action.type == "location/enableDisableTracking") {
-        console.log("bool:", action.type.bool);
         const bool = action.payload.bool;
         const toggle = { showMyLocation: bool };
         // for start no state

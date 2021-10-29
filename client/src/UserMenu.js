@@ -262,7 +262,9 @@ export default function Usermenu() {
                                 <h4>found: </h4>
                                 {toys &&
                                     toys.yesToys.map((toy, i) => (
-                                        <li key={i}>{toy}</li>
+                                        <li className="toy" key={i}>
+                                            {toy}
+                                        </li>
                                     ))}{" "}
                             </>
                         )}
@@ -273,7 +275,9 @@ export default function Usermenu() {
                                 <h4>not found:</h4>
                                 {toys &&
                                     toys.noToys.map((toy, i) => (
-                                        <li key={i}>{toy}</li>
+                                        <li className="toy" key={i}>
+                                            {toy}
+                                        </li>
                                     ))}
                             </>
                         )}

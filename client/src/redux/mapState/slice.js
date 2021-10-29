@@ -1,14 +1,12 @@
 export function mapStateReducer(state = null, action) {
     if (action.type == "mapState/receivedMapState") {
-        console.log(action.payload.map);
         state = action.payload.map;
     } else if (action.type == "mapState/receivedNewMapState") {
         const map = action.payload.map;
         return map;
     } else if (action.type == "mapState/receivedNewCoordinates") {
         const newPos = action.payload.pos;
-        console.log("coords:", action.payload.pos);
-        console.log("state:", state);
+
         return {
             ...state,
             latitude: newPos[1],

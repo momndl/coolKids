@@ -16,7 +16,13 @@ export default function App() {
     return (
         <div id="header">
             <div className="headerLogoDiv">
-                <img className="headerLogo" src="slide.png" />
+                <img
+                    onClick={() => {
+                        location.reload();
+                    }}
+                    className="headerLogo"
+                    src="slide.png"
+                />
                 <h1>Cool Kids</h1>
             </div>
             <span onClick={handleLogout}> logout</span>

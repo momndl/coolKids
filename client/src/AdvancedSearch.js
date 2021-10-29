@@ -17,7 +17,6 @@ export default function AdvancedSearch(props) {
     const [error, setError] = useState("");
     function searchPlaygrounds(e) {
         e.preventDefault();
-        console.log(e.target.innerText);
 
         fetch("/playgrounds/search.json", {
             method: "POST",
@@ -32,10 +31,9 @@ export default function AdvancedSearch(props) {
                     console.log("POST /searchplaygrounds.json:", resp);
                     if (resp.success) {
                         setError("");
-                        console.log("succes!, do something");
+
                         dispatch(advancedMarkerReceived(resp.data));
                     } else if (!resp.success) {
-                        console.log("nothing found, message: ", resp.message);
                         dispatch(advancedMarkerReceived(null));
                         setError(resp.message);
                     }
@@ -54,11 +52,9 @@ export default function AdvancedSearch(props) {
             .forwardGeocode({
                 query,
                 limit: 1,
-                //routing: true, // think i dont need it
-                // proximity: proxi, // LAT AND LONG -> now hard coded, we need this from myLocation const
+                bbox: [12.790833, 52.294202, 13.739777, 52.729639],
+                proximity: [13.3967488, 52.4663405],
                 types: ["poi"],
-                // bbox: [-77.210763, 38.803367, -76.853675, 39.052643], bbox	Limit results to only those contained within the supplied bounding box. Bounding boxes should be supplied as four numbers separated by commas, in minLon,minLat,maxLon,maxLat order. The bounding box cannot cross the 180th meridian.
-                // marker: true, -> key does not work
             })
             .send()
             .catch((e) => console.log("no search value", e));

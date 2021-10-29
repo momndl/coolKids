@@ -1,6 +1,5 @@
 export function triggerReducer(state = null, action) {
     if (action.type == "trigger/receivedTrigger") {
-        console.log("hello", action.payload.trigger);
         const data = action.payload.trigger;
         if (state === null) {
             return [data];

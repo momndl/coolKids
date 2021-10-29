@@ -1,7 +1,7 @@
 export function advancedSearchMarkerReducer(state = null, action) {
     if (action.type == "advancedMarker/receivedMarker") {
         const advancedMarker = action.payload.data;
-        console.log("okay check it:", advancedMarker);
+
         if (advancedMarker === null) {
             return null;
         }

@@ -13,7 +13,7 @@ body {
 #welcome {
     height: 100vh;
     width: 100vw;
-    background-color: lightsalmon;
+    background-color: #ffa07adb;
 }
 
 #registration {
@@ -142,6 +142,16 @@ body {
 .headerLogo {
     height: 80px;
     color: rgb(236, 236, 200);
+    transition: all, 0.3s;
+    cursor: pointer;
+}
+
+.headerLogo:hover {
+    height: 82px;
+}
+
+.toy::first-letter {
+    text-transform: capitalize;
 }
 
 #header span {
@@ -177,12 +187,6 @@ body {
     height: 100%;
 }
 
-.mapContainer {
-    /* position: absolute;
-    top: 200px;
-    left: 30px; */
-}
-
 .mapinfobar {
     background-color: rgba(35, 55, 75, 0.9);
     color: #fff;
@@ -196,13 +200,25 @@ body {
     border-radius: 4px;
 }
 
+.locationinfobar {
+    background-color: rgba(44, 84, 97, 0.9);
+    color: #fff;
+    padding: 6px 12px;
+    font-family: monospace;
+    z-index: 1;
+    position: absolute;
+    top: 110;
+    right: 0;
+    margin: 12px;
+    border-radius: 4px;
+}
+
 .marker {
     width: 30px;
     height: 40px;
 }
 
 .searchTarget {
-    border: solid black 1px;
     padding: 10px;
 }
 
@@ -214,7 +230,7 @@ body {
 }
 
 .searchTarget span:hover {
-    color: hotpink;
+    font-weight: 600;
 }
 
 .searchTitle {
@@ -236,7 +252,6 @@ body {
 }
 
 #appMainContainer {
-    border: solid 1px;
     display: grid;
     grid-template-columns: 405px 1fr;
 }
@@ -276,8 +291,7 @@ body {
 }
 
 #advancedSearchContainer {
-    border: red 2px dotted;
-    height: 830px;
+    height: 260px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -289,6 +303,13 @@ body {
     border-radius: 5px;
     transition: all 0.5s;
     margin: 5px;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 700;
+}
+
+#advancedSearchContainer span {
+    font-weight: 600;
+    margin: 15px;
 }
 
 #advancedSearchContainer button:hover {
@@ -315,9 +336,32 @@ body {
     grid-template-rows: 0.5fr 1fr 1fr 1fr;
 }
 
+.updatePlaygroundContainer label {
+    cursor: pointer;
+}
+
+.updatePlaygroundContainer label:hover {
+    font-weight: 800;
+}
+
 .updatePlaygroundContainer form {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    padding-left: 30px;
+}
+
+.updateBtn {
+    margin-left: 5 px;
+    margin-top: 5 px;
+    color: black;
+    background-color: whitesmoke;
+    border-radius: 5px;
+    transition: all 0.5s;
+}
+.updateBtn:hover {
+    background-color: black;
+    color: whitesmoke;
 }
 
 .closer {
@@ -343,70 +387,68 @@ body {
     grid-row: 2;
     grid-column: 2;
 }
+
+.updateGridRow2 p {
+    font-size: 1.3em;
+    font-weight: 600;
+}
+
 .updateGridRow3 {
     grid-row: 3;
     grid-column: 2;
 }
+
+.updateGridRow3 p {
+    font-size: 1.3em;
+    font-weight: 600;
+}
+
 .updateGridRow4 {
     grid-row: 4;
     grid-column: 2;
 }
 
-/* .markerDiv {
-    background-color: red;
+.updateGridRow4 p {
+    font-size: 1.3em;
+    font-weight: 600;
 }
 
-.markerDiv p {
-    margin: 0;
-} */
+.updateGridRow4 textarea {
+    resize: none;
+    margin-left: 30px;
+}
 
 .targetMarker {
     background-color: rgb(255, 85, 85);
     margin: 0;
     transform: translateX(-50%);
     cursor: pointer;
+    border-radius: 4px;
 }
-
-/* .searchMarkerDiv {
-    background-color: blue;
-} */
 
 .searchMarker {
     background-color: lightskyblue;
     margin: 0;
     transform: translateX(-50%);
     cursor: pointer;
+    border-radius: 4px;
 }
-
-/* .favoriteMarkerDiv {
-     background-color: lightgreen;
-    padding: 5px;
-    transform: translate(-5px, -5px);
-}
-
-.favoriteMarkerDiv p {
-    margin: 0;
-    transform: translateX(-50%);
-}  */
 
 .favoriteMarker {
-    background-color: green;
+    border-radius: 4px;
+    background-color: rgb(0, 128, 0);
     padding: 2px;
     margin: 0;
     transform: translate(-50%, -2px);
     cursor: pointer;
 }
 
-/* .advancedMarkerDiv {
-    background-color: purple;
-    padding: 10px;
-} */
-
 .advancedMarker {
     margin: 0;
     transform: translateX(-50%);
     background-color: purple;
     cursor: pointer;
+    border-radius: 4px;
 }
 .commentsContainer {
     height: 300px;

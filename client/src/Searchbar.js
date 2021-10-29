@@ -10,6 +10,7 @@ import { toggleLocation } from "./redux/location/slice";
 import AdvancedSearch from "./AdvancedSearch";
 
 export default function Searchbar() {
+    const trigger = useSelector((state) => state.trigger);
     const geocoder = GeocoderService({
         accessToken: acces_token,
     });
@@ -18,8 +19,8 @@ export default function Searchbar() {
     );
     const dispatch = useDispatch();
     useEffect(() => {
-        //console.log("searchbar mounted");
-    }, []);
+        setSearch("");
+    }, [trigger]);
     const [search, setSearch] = useState("");
     const [advancedSearch, setAdvancedSearch] = useState("");
     // const myLocation = useSelector(
