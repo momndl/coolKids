@@ -147,7 +147,7 @@ export function Map() {
             })
             .send()
             .catch((e) => console.log("no search value", e));
-
+        console.log("what is it", response.body.features);
         dispatch(triggerReceived("go!"));
         dispatch(targetDataReceived(response.body.features[0]));
         dispatch(targetMarkerReceived(response.body.features[0]));

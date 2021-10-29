@@ -93,7 +93,7 @@ app.post("/login.json", (req, res) => {
                         } else {
                             res.json({
                                 success: false,
-                                error: "invalid email or password :(",
+                                error: "invalid email or password : (",
                             });
                         }
                     }
@@ -101,7 +101,7 @@ app.post("/login.json", (req, res) => {
             } else {
                 res.json({
                     success: false,
-                    error: "invalid email or password :(",
+                    error: "invalid email or password : (",
                 });
             }
         })

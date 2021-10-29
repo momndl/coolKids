@@ -20,6 +20,9 @@ export default function Searchbar() {
     const dispatch = useDispatch();
     useEffect(() => {
         setSearch("");
+        if (advancedSearch) {
+            setAdvancedSearch(false);
+        }
     }, [trigger]);
     const [search, setSearch] = useState("");
     const [advancedSearch, setAdvancedSearch] = useState("");

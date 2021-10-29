@@ -1,17 +1,11 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 export default function Login() {
     const [input, setInput] = useState({});
     const [error, setError] = useState("");
-    useEffect(() => {
-        console.log("login mounted");
-    }, []);
 
     function handleChange({ target }) {
-        console.log("someone is typing in an input field");
         setInput({ ...input, [target.name]: target.value });
-
-        console.log("Registration state update:", input);
     }
 
     function handleLogin(e) {
@@ -29,18 +23,15 @@ export default function Login() {
             resp
                 .json()
                 .then((resp) => {
-                    console.log("POST /login.json:", resp);
                     if (resp.success) {
                         location.replace("/");
                     } else {
-                        setError({ error: resp.error });
+                        setError(resp.error);
                     }
                 })
                 .catch((err) => {
                     console.log("err in POST /registration.json", err);
-                    setError({
-                        error: "Something went wrong with registration",
-                    });
+                    setError(resp.error);
                 })
         );
     }
@@ -53,7 +44,7 @@ export default function Login() {
             </div>
             <div className="formContainer">
                 <h1 className="headline">Login</h1>
-                {error && <h2 className="regError"> {error.error}</h2>}
+                {error && <h2 className="regError"> {error}</h2>}
                 <form className="regForm">
                     <input
                         type="email"
@@ -68,7 +59,7 @@ export default function Login() {
                         onChange={handleChange}
                     ></input>
                     <button onClick={(e) => handleLogin(e)}>login</button>
-                    <Link to="/">Not registered? Go here!</Link>
+                    <Link to="/">Not registered? Click here!</Link>
                 </form>
             </div>
         </section>

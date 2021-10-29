@@ -21,7 +21,7 @@ export default function Usermenu() {
     const [addFavorite, setAddFavorite] = useState(true);
     const [removeFavorite, setRemoveFavorite] = useState("");
     const [playgroundId, setplaygroundId] = useState("");
-    const [addRemoveBtnText, setAddRemoveBtnText] = useState("add as favorite"); // we dont use this
+
     const [test, setTest] = useState("");
 
     const dispatch = useDispatch();
@@ -45,11 +45,10 @@ export default function Usermenu() {
             resp
                 .json()
                 .then((resp) => {
-                    console.log("RES POST /playgrounds/removeFAV.json", resp);
                     if (resp.success) {
                         setRemoveFavorite(false);
                         setAddFavorite(true);
-                        console.log("success!, dispatch now", target);
+
                         dispatch(removeFavoriteMarker(target));
                     }
                 })

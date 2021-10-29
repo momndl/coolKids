@@ -10,10 +10,16 @@ body {
     background-color: antiquewhite;
 }
 
+.regError {
+    font-family: "Indie Flower", cursive;
+    font-size: 2.2em;
+    margin: 10px;
+}
+
 #welcome {
     height: 100vh;
     width: 100vw;
-    background-color: #ffa07adb;
+    background-color: #ffa07aa1;
 }
 
 #registration {
@@ -41,11 +47,12 @@ body {
 }
 
 .regHeadline:hover {
-    color: thistle;
+    color: hotpink;
     transform: rotate(-12deg);
 }
 
 .headline {
+    font-family: "Indie Flower", cursive;
     text-align: center;
     transform: rotate(354deg);
     font-size: 2em;
@@ -84,10 +91,12 @@ body {
     border-radius: 5px;
     cursor: pointer;
     margin: 5px;
+    transition: all, 0.4s;
 }
 
 .regForm button:hover {
     background-color: rgba(138, 214, 224, 0.075);
+    box-shadow: 0px 0px 7px 1px #ffffff;
 }
 
 .regForm a {
