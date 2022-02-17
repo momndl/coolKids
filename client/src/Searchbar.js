@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { searchResultsReceived } from "./redux/searchReducer/slice";
 import GeocoderService from "@mapbox/mapbox-sdk/services/geocoding";
-import { acces_token } from "./accestoken";
+import { MapBox_Access_Token } from "../../secrets.json";
 import { updateMapCoordinates } from "./redux/mapState/slice";
 import { targetMarkerReceived } from "./redux/targetMarker/slice";
 import { targetDataReceived } from "./redux/target/slice";
@@ -12,7 +12,7 @@ import AdvancedSearch from "./AdvancedSearch";
 export default function Searchbar() {
     const trigger = useSelector((state) => state.trigger);
     const geocoder = GeocoderService({
-        accessToken: acces_token,
+        accessToken: MapBox_Access_Token,
     });
     const showMyLocation = useSelector(
         (state) => state.location && state.location.showMyLocation
@@ -26,9 +26,10 @@ export default function Searchbar() {
     }, [trigger]);
     const [search, setSearch] = useState("");
     const [advancedSearch, setAdvancedSearch] = useState("");
-    // const myLocation = useSelector(
-    //     (state) => state.location && state.location.data
-    // );
+    const myLocation = useSelector(
+        (state) => state.location && state.location.data
+    );
+
     //const [query, setQuery] = useState();
     // const state = useSelector((state) => state.state);
     function advancedSearchHandler() {
@@ -44,37 +45,66 @@ export default function Searchbar() {
     }
     function toggleMyLocation() {
         if (showMyLocation) {
+            console.log("my loc!", myLocation.pos);
             dispatch(toggleLocation(false));
         } else {
+            console.log("my loc!", myLocation);
+
             dispatch(toggleLocation(true));
         }
     }
     // POSSIBLE HANDLER IN STORAGE.js
     async function searchHandler(e) {
         const query = e.target.value;
-        const response = await geocoder
-            .forwardGeocode({
-                query,
-                limit: 10,
-                //routing: true, // think i dont need it
-                proximity: [13.3967488, 52.4663405],
+        if (myLocation) {
+            const proxi = [myLocation.pos[1], myLocation.pos[0]];
+            console.log("got your location");
+            const response = await geocoder
+                .forwardGeocode({
+                    query,
+                    limit: 10,
+                    //routing: true, // think i dont need it
+                    proximity: proxi,
 
-                types: ["poi"],
-                bbox: [12.790833, 52.294202, 13.739777, 52.729639],
-                // marker: true, -> key does not work
-            })
-            .send()
-            .catch((e) => console.log("no search value", e));
+                    types: ["poi"],
+                    //bbox: [12.790833, 52.294202, 13.739777, 52.729639],
+                    // marker: true, -> key does not work
+                })
+                .send()
+                .catch((e) => console.log("no search value", e));
 
-        if (!response) {
-            setSearch("");
-            return;
+            if (!response) {
+                setSearch("");
+                return;
+            } //console.log("res,", response);
+            setSearch(response.body.features);
+            dispatch(searchResultsReceived(response.body.features));
+            //dispatch(searchResultsReceived(response.body.features));
+        } else {
+            console.log("no location yet");
+            const response = await geocoder
+                .forwardGeocode({
+                    query,
+                    limit: 10,
+                    //routing: true, // think i dont need it
+                    proximity: [9.3967488, 52.4663405],
+
+                    types: ["poi"],
+                    //bbox: [12.790833, 52.294202, 13.739777, 52.729639],
+                    // marker: true, -> key does not work
+                })
+                .send()
+                .catch((e) => console.log("no search value", e));
+
+            if (!response) {
+                setSearch("");
+                return;
+            }
+            //console.log("res,", response);
+            setSearch(response.body.features);
+            dispatch(searchResultsReceived(response.body.features));
+            //dispatch(searchResultsReceived(response.body.features));
         }
-
-        //console.log("res,", response);
-        setSearch(response.body.features);
-        dispatch(searchResultsReceived(response.body.features));
-        //dispatch(searchResultsReceived(response.body.features));
     }
     return (
         <div id="searchbar">
@@ -98,7 +128,7 @@ export default function Searchbar() {
                             <div className="searchResult" key={i}>
                                 <p
                                     onClick={() => {
-                                        console.log(result);
+                                        console.log("result", result);
                                         dispatch(targetDataReceived(result));
                                         dispatch(targetMarkerReceived(result));
                                         dispatch(
@@ -107,7 +137,7 @@ export default function Searchbar() {
                                             )
                                         );
                                         setSearch("");
-                                        //console.log("check", result);
+                                        console.log("check", result);
                                     }}
                                 >
                                     {result.place_name}

@@ -1,5 +1,6 @@
 import ReactMapGL, { Marker, GeolocateControl } from "react-map-gl";
-import { acces_token } from "./accestoken";
+
+import { MapBox_Access_Token } from "../../secrets.json";
 import React, { useRef, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { mapStateReceived, updateMapState } from "./redux/mapState/slice";
@@ -13,9 +14,9 @@ import { targetMarkerReceived } from "./redux/targetMarker/slice";
 import { triggerReceived } from "./redux/trigger/slice";
 import LocationMarker from "./locationInfo";
 
-const MAPBOX_TOKEN = acces_token; // Set your mapbox token here
+const MAPBOX_TOKEN = MapBox_Access_Token; // Set your mapbox token here
 const geocoder = GeocoderService({
-    accessToken: acces_token,
+    accessToken: MapBox_Access_Token,
 });
 export function Map() {
     const advancedMarker = useSelector((state) => state.advancedMarker);

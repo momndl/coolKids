@@ -7,7 +7,7 @@ const cookieSession = require("cookie-session");
 const db = require("./db");
 
 app.use(compression());
-app.use(express.json()); // we use this middleware to parse JSON requests coming in!
+app.use(express.json()); // we use this middleware to parse JSON requests co ming in!
 
 let secrets;
 process.env.NODE_ENV === "production"
@@ -32,11 +32,13 @@ app.get("/user/id.json", function (req, res) {
 
 app.post("/registration.json", (req, res) => {
     const { first, last, email, password } = req.body;
-
+    console.log("body", req.body);
     // make this async=====================================================
     if (password && first && last && email) {
+        console.log("1");
         db.regCheck(email)
             .then((data) => {
+                console.log("2", data);
                 if (!data.rows[0]) {
                     hash(password).then((hashedPW) => {
                         db.addUser(first, last, email, hashedPW)

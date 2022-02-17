@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { advancedMarkerReceived } from "./redux/advancedSearchMarkers/slice";
 import GeocoderService from "@mapbox/mapbox-sdk/services/geocoding";
-import { acces_token } from "./accestoken";
+import { MapBox_Access_Token } from "../../secrets.json";
 import { updateMapCoordinates } from "./redux/mapState/slice";
 import { targetDataReceived } from "./redux/target/slice";
 import { targetMarkerReceived } from "./redux/targetMarker/slice";
@@ -10,7 +10,7 @@ import { triggerReceived } from "./redux/trigger/slice";
 
 export default function AdvancedSearch(props) {
     const geocoder = GeocoderService({
-        accessToken: acces_token,
+        accessToken: MapBox_Access_Token,
     });
     const dispatch = useDispatch();
     const advancedMarker = useSelector((state) => state.advancedMarker);
