@@ -48,31 +48,31 @@ export function Map() {
     const positionOptions = { enableHighAccuracy: true };
 
     useEffect(() => {
-        if (showMyLocation) {
-            const options = {
-                enableHighAccuracy: true,
-                timeout: 5000,
-                maximumAge: 0,
+        //if (showMyLocation) {
+        const options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0,
+        };
+        function success(pos) {
+            const crd = pos.coords;
+            console.log("Your current position is:");
+            console.log(`Latitude : ${crd.latitude}`);
+            console.log(`Longitude: ${crd.longitude}`);
+            console.log(`More or less ${crd.accuracy} meters.`);
+            myPos = {
+                pos: [crd.latitude, crd.longitude],
+                accuracy: crd.accuracy,
             };
-            function success(pos) {
-                const crd = pos.coords;
-                console.log("Your current position is:");
-                console.log(`Latitude : ${crd.latitude}`);
-                console.log(`Longitude: ${crd.longitude}`);
-                console.log(`More or less ${crd.accuracy} meters.`);
-                myPos = {
-                    pos: [crd.latitude, crd.longitude],
-                    accuracy: crd.accuracy,
-                };
 
-                dispatch(locationInitPosReceived(myPos));
-            }
-            function error(err) {
-                console.warn(`ERROR(${err.code}): ${err.message}`);
-            }
-            navigator.geolocation.getCurrentPosition(success, error, options);
+            dispatch(locationInitPosReceived(myPos));
         }
-    }, [showMyLocation]); // listen on showMyLocation just for tests, use myPos on geocoder ->
+        function error(err) {
+            console.warn(`ERROR(${err.code}): ${err.message}`);
+        }
+        navigator.geolocation.getCurrentPosition(success, error, options);
+        //}
+    }, []); // listen on showMyLocation just for tests, use myPos on geocoder ->
     // proximity	Bias the response to favor results that are closer to this location, provided as two comma-separated coordinates in longitude,latitude order.
     async function favHandler(e) {
         const query = e.target.innerText;

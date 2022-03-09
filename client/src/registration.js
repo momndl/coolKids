@@ -9,17 +9,11 @@ export default function Registration() {
         console.log("reg mounted");
     }, []);
     function handleChange({ target }) {
-        console.log("someone is typing in an input field");
         setInput({ ...input, [target.name]: target.value });
-
-        console.log("Registration state update:", input);
     }
 
     function handleRegister(e) {
-        e.preventDefault(); // to prevent the refresh that would happen otherwise
-        console.log("you clicked on the button");
-        console.log("this.state", input);
-        // now we'll want to make a fetch to register our user
+        e.preventDefault();
         fetch("/registration.json", {
             method: "POST",
             headers: {
@@ -32,25 +26,15 @@ export default function Registration() {
                 .then((resp) => {
                     console.log("POST /registrations.json:", resp);
                     if (resp.success) {
-                        console.log("hat geklappt frau schwarz");
-                        // this.setState({ userId: resp.userId });
+                        // check whats happening here ====
                         location.reload();
-                        // console.log("check id", this.state);
                     } else {
-                        console.log("hat nicht geklappt, sad face");
                         setError(resp.error);
                     }
-                    // depending on whether or not our user successfully registered we now want to do either:
-                    // a: user successfully registered, the should be send to the logged in experience, in this
-                    // case we want to rerun our fetch from start.js
-                    // and we can trigger that with the help of location.reload()
-                    // b: sth went wrong we want to have our registration component
-                    // to render with an error message
                 })
                 .catch((err) => {
                     console.log("err in POST /registration.json", err);
                     setError(resp.error);
-                    // update the error property in state!
                 })
         );
     }

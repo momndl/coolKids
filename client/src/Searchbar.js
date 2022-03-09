@@ -36,75 +36,47 @@ export default function Searchbar() {
         if (!advancedSearch) {
             setAdvancedSearch(true);
             setSearch("");
-            // dispatch(targetDataReceived(null));
+            //  dispatch(targetDataReceived(null));
         } else {
             setAdvancedSearch(false);
             setSearch("");
-            // dispatch(targetDataReceived(null));
+            //    dispatch(targetDataReceived(null));
         }
     }
     function toggleMyLocation() {
         if (showMyLocation) {
-            console.log("my loc!", myLocation.pos);
             dispatch(toggleLocation(false));
         } else {
-            console.log("my loc!", myLocation);
-
             dispatch(toggleLocation(true));
         }
     }
     // POSSIBLE HANDLER IN STORAGE.js
     async function searchHandler(e) {
         const query = e.target.value;
-        if (myLocation) {
-            const proxi = [myLocation.pos[1], myLocation.pos[0]];
-            console.log("got your location");
-            const response = await geocoder
-                .forwardGeocode({
-                    query,
-                    limit: 10,
-                    //routing: true, // think i dont need it
-                    proximity: proxi,
 
-                    types: ["poi"],
-                    //bbox: [12.790833, 52.294202, 13.739777, 52.729639],
-                    // marker: true, -> key does not work
-                })
-                .send()
-                .catch((e) => console.log("no search value", e));
+        const proxi = [myLocation.pos[1], myLocation.pos[0]];
+        console.log("got your location");
+        const response = await geocoder
+            .forwardGeocode({
+                query,
+                limit: 10,
+                //routing: true, // think i dont need it
+                proximity: proxi,
 
-            if (!response) {
-                setSearch("");
-                return;
-            } //console.log("res,", response);
-            setSearch(response.body.features);
-            dispatch(searchResultsReceived(response.body.features));
-            //dispatch(searchResultsReceived(response.body.features));
-        } else {
-            console.log("no location yet");
-            const response = await geocoder
-                .forwardGeocode({
-                    query,
-                    limit: 10,
-                    //routing: true, // think i dont need it
-                    proximity: [9.3967488, 52.4663405],
+                types: ["poi"],
+                //bbox: [12.790833, 52.294202, 13.739777, 52.729639],
+                // marker: true, -> key does not work
+            })
+            .send()
+            .catch((e) => console.log("no search value", e));
 
-                    types: ["poi"],
-                    //bbox: [12.790833, 52.294202, 13.739777, 52.729639],
-                    // marker: true, -> key does not work
-                })
-                .send()
-                .catch((e) => console.log("no search value", e));
-
-            if (!response) {
-                setSearch("");
-                return;
-            }
-            //console.log("res,", response);
-            setSearch(response.body.features);
-            dispatch(searchResultsReceived(response.body.features));
-            //dispatch(searchResultsReceived(response.body.features));
-        }
+        if (!response) {
+            setSearch("");
+            return;
+        } //console.log("res,", response);
+        setSearch(response.body.features);
+        dispatch(searchResultsReceived(response.body.features));
+        //dispatch(searchResultsReceived(response.body.features));
     }
     return (
         <div id="searchbar">
@@ -117,7 +89,7 @@ export default function Searchbar() {
                 advanced search
             </button>
             <button className="searchBtn" onClick={toggleMyLocation}>
-                my location
+                show my location
             </button>
 
             {/* CHANGE DIV STRUCTURE SO WE HAVE RESULT CONTAINER */}

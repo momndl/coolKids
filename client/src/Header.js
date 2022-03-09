@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
-export default function App() {
+export default function Header() {
     useEffect(() => {
         console.log("header mounted");
     }, []);
@@ -13,6 +14,9 @@ export default function App() {
                 }
             });
     };
+    const myLocation = useSelector(
+        (state) => state.location && state.location.data
+    );
     return (
         <div id="header">
             <div className="headerLogoDiv">
@@ -24,7 +28,13 @@ export default function App() {
                     src="slide.png"
                 />
                 <h1>Cool Kids</h1>
+                {!myLocation ? (
+                    <div className="locationStatus red"> </div>
+                ) : (
+                    <div className="locationStatus green"> </div>
+                )}
             </div>
+
             <span onClick={handleLogout}> logout</span>
         </div>
     );
